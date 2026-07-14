@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎮 Fortnite Sprite Tracker</title>
 <style>
-/* ===== RESET & BASE ===== */
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding-bottom:40px}
 :root{
@@ -24,14 +23,31 @@ radial-gradient(circle at 80% 50%,rgba(0,245,255,0.1) 0%,transparent 50%);pointe
 header h1{font-size:2.5em;font-weight:800;
 background:linear-gradient(90deg,var(--purple),var(--blue),var(--pink));
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-text-shadow:0 0 30px rgba(157,78,221,0.5);margin-bottom:5px;letter-spacing:2px}
-header p{color:var(--text-dim);font-size:1.1em}
-.player-tags{display:flex;justify-content:center;gap:15px;margin-top:15px;flex-wrap:wrap}
-.player-tag{padding:6px 16px;border-radius:20px;font-weight:600;font-size:.9em;cursor:pointer;transition:all .3s}
-.player-tag.rich{background:rgba(157,78,221,.2);border:2px solid var(--purple);color:var(--purple)}
-.player-tag.liz{background:rgba(255,0,110,.2);border:2px solid var(--pink);color:var(--pink)}
-.player-tag.mike{background:rgba(0,245,255,.2);border:2px solid var(--blue);color:var(--blue)}
-.player-tag.tyler{background:rgba(255,133,0,.2);border:2px solid var(--orange);color:var(--orange)}
+text-shadow:0 0 30px rgba(157,78,221,0.5);margin-bottom:5px;letter-spacing:2px;position:relative}
+header p{color:var(--text-dim);font-size:1.1em;position:relative}
+
+/* ===== PLAYER TAGS (clickable) ===== */
+.player-tags{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap;position:relative}
+.player-tag{padding:8px 18px;border-radius:20px;font-weight:700;font-size:.95em;cursor:pointer;
+transition:all .3s;user-select:none;display:flex;align-items:center;gap:6px}
+.player-tag .tag-mode{font-size:.7em;font-weight:600;opacity:0;transition:opacity .3s}
+.player-tag.active .tag-mode{opacity:1}
+.player-tag.rich{background:rgba(157,78,221,.15);border:2px solid var(--purple);color:var(--purple)}
+.player-tag.rich.active{background:var(--purple);color:#fff;box-shadow:0 0 20px rgba(157,78,221,.5)}
+.player-tag.liz{background:rgba(255,0,110,.15);border:2px solid var(--pink);color:var(--pink)}
+.player-tag.liz.active{background:var(--pink);color:#fff;box-shadow:0 0 20px rgba(255,0,110,.5)}
+.player-tag.mike{background:rgba(0,245,255,.15);border:2px solid var(--blue);color:var(--blue)}
+.player-tag.mike.active{background:var(--blue);color:#fff;box-shadow:0 0 20px rgba(0,245,255,.5)}
+.player-tag.tyler{background:rgba(255,133,0,.15);border:2px solid var(--orange);color:var(--orange)}
+.player-tag.tyler.active{background:var(--orange);color:#fff;box-shadow:0 0 20px rgba(255,133,0,.5)}
+.player-tag:hover{transform:scale(1.05)}
+
+/* ===== MODE TOGGLES ===== */
+.mode-toggles{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;position:relative}
+.mode-btn{padding:5px 14px;border-radius:15px;font-size:.8em;font-weight:600;cursor:pointer;
+border:2px solid var(--border);background:var(--card);color:var(--text-dim);transition:all .3s}
+.mode-btn.active{border-color:var(--green);color:var(--green);background:rgba(6,255,165,.1)}
+.mode-btn:hover{transform:scale(1.05)}
 
 /* ===== CONTROLS BAR ===== */
 .controls-bar{position:sticky;top:0;z-index:100;background:rgba(10,10,26,.95);
@@ -48,13 +64,16 @@ color:var(--text-dim);cursor:pointer;font-size:.85em;font-weight:600;transition:
 .btn-export:hover{background:rgba(6,255,165,.2);box-shadow:0 0 10px rgba(6,255,165,.3)}
 .btn-import{background:rgba(255,213,10,.1);border-color:var(--gold);color:var(--gold)}
 .btn-import:hover{background:rgba(255,213,10,.2);box-shadow:0 0 10px rgba(255,213,10,.3)}
+.btn-trade{background:rgba(255,133,0,.1);border-color:var(--orange);color:var(--orange)}
+.btn-trade:hover{background:rgba(255,133,0,.2);box-shadow:0 0 10px rgba(255,133,0,.3)}
 .btn-reset{background:rgba(239,35,60,.1);border-color:var(--red);color:var(--red)}
 .btn-reset:hover{background:rgba(239,35,60,.2);box-shadow:0 0 10px rgba(239,35,60,.3)}
 
 /* ===== PROGRESS SECTION ===== */
 .progress-section{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;max-width:1200px;margin:0 auto}
-.progress-card{background:var(--card);border-radius:12px;padding:20px;border:2px solid var(--border);transition:transform .3s}
+.progress-card{background:var(--card);border-radius:12px;padding:20px;border:2px solid var(--border);transition:transform .3s;cursor:pointer}
 .progress-card:hover{transform:translateY(-3px)}
+.progress-card.active{border-color:var(--green)}
 .progress-card h3{font-size:1.1em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .progress-card .count{font-size:.9em;color:var(--text-dim)}
 .progress-bar{width:100%;height:12px;background:var(--card-light);border-radius:6px;overflow:hidden;position:relative}
@@ -79,7 +98,6 @@ border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
 .sprite-card:hover{border-color:var(--purple);transform:scale(1.02);box-shadow:0 4px 20px rgba(157,78,221,.2)}
 .sprite-card.hidden{display:none}
 .sprite-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.sprite-card[data-rarity="common"]::before{background:#b0b0b0}
 .sprite-card[data-rarity="rare"]::before{background:var(--blue)}
 .sprite-card[data-rarity="epic"]::before{background:var(--purple)}
 .sprite-card[data-rarity="legendary"]::before{background:var(--gold)}
@@ -109,9 +127,42 @@ display:flex;align-items:center;justify-content:center;transition:all .3s;backgr
 .cb-custom.checked::after{content:'✓';color:white;font-size:15px;font-weight:bold}
 .cb-custom{user-select:none;-webkit-user-select:none}
 
+/* ===== TRADE MODAL ===== */
+.trade-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);
+backdrop-filter:blur(5px);z-index:1000;display:none;justify-content:center;align-items:flex-start;
+padding:40px 20px;overflow-y:auto}
+.trade-overlay.show{display:flex}
+.trade-modal{background:var(--card);border:2px solid var(--orange);border-radius:16px;
+max-width:900px;width:100%;padding:30px;box-shadow:0 0 50px rgba(255,133,0,.3)}
+.trade-modal h2{font-size:1.8em;text-align:center;margin-bottom:5px;
+background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;background-clip:text}
+.trade-modal .subtitle{text-align:center;color:var(--text-dim);margin-bottom:25px;font-size:.95em}
+.trade-close{float:right;background:none;border:none;color:var(--text-dim);font-size:1.5em;cursor:pointer;transition:color .3s}
+.trade-close:hover{color:var(--red)}
+.trade-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.trade-tab{padding:8px 16px;border-radius:8px;font-weight:600;font-size:.85em;cursor:pointer;
+border:2px solid var(--border);background:var(--card-light);color:var(--text-dim);transition:all .3s}
+.trade-tab.active{border-color:var(--orange);color:var(--orange);background:rgba(255,133,0,.1)}
+.trade-pair-section{margin-bottom:25px}
+.trade-pair-header{font-size:1.1em;font-weight:700;margin-bottom:12px;padding:10px 15px;
+border-radius:8px;background:var(--card-light);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.trade-pair-header .arrow{color:var(--green);font-size:1.2em}
+.trade-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.trade-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-light);
+border-radius:8px;border-left:4px solid var(--border);transition:all .3s}
+.trade-item:hover{transform:translateX(5px);border-left-color:var(--orange)}
+.trade-item .sprite-icon-sm{font-size:1.2em}
+.trade-item .trade-sprite-name{font-weight:600;font-size:.95em}
+.trade-item .trade-tag{margin-left:auto;font-size:.75em;font-weight:600;padding:3px 10px;border-radius:10px}
+.tag-has{background:rgba(6,255,165,.15);color:var(--green)}
+.tag-needs{background:rgba(239,35,60,.15);color:var(--red)}
+.no-trades{text-align:center;padding:30px;color:var(--text-dim);font-size:1.1em}
+.mutual-badge{background:linear-gradient(90deg,var(--green),var(--gold));color:#000;padding:3px 10px;
+border-radius:10px;font-size:.7em;font-weight:700;margin-left:8px}
+
 /* ===== FOOTER ===== */
 footer{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:.85em;border-top:1px solid var(--border);margin-top:40px}
-footer a{color:var(--blue);text-decoration:none}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
@@ -128,6 +179,8 @@ header h1{font-size:1.8em}
 .filter-btn,.btn-action{font-size:.75em;padding:6px 10px}
 .progress-section{grid-template-columns:1fr 1fr}
 .checkboxes{grid-template-columns:repeat(4,1fr)}
+.trade-modal{padding:20px}
+.trade-list{grid-template-columns:1fr}
 }
 @media(max-width:400px){
 .progress-section{grid-template-columns:1fr}
@@ -140,21 +193,26 @@ header h1{font-size:1.8em}
 <h1>🎮 SPRITE TRACKER</h1>
 <p>Fortnite Chapter 7 · Season 3 · Collection Checklist</p>
 <div class="player-tags">
-<span class="player-tag rich">👤 Rich</span>
-<span class="player-tag liz">👤 Liz</span>
-<span class="player-tag mike">👤 Mike</span>
-<span class="player-tag tyler">👤 Tyler</span>
+<span class="player-tag rich" data-player="rich" onclick="togglePlayerFilter('rich')">👤 Rich <span class="tag-mode"></span></span>
+<span class="player-tag liz" data-player="liz" onclick="togglePlayerFilter('liz')">👤 Liz <span class="tag-mode"></span></span>
+<span class="player-tag mike" data-player="mike" onclick="togglePlayerFilter('mike')">👤 Mike <span class="tag-mode"></span></span>
+<span class="player-tag tyler" data-player="tyler" onclick="togglePlayerFilter('tyler')">👤 Tyler <span class="tag-mode"></span></span>
+</div>
+<div class="mode-toggles" id="modeToggles" style="display:none">
+<button class="mode-btn active" data-mode="has" onclick="setPlayerMode('has')">✅ Has</button>
+<button class="mode-btn" data-mode="needs" onclick="setPlayerMode('needs')">❌ Needs</button>
 </div>
 </header>
 
 <div class="controls-bar">
-<input type="text" class="search-box" id="search" placeholder="🔍 Search sprites..." oninput="filterSprites()">
-<button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
-<button class="filter-btn" data-filter="base" onclick="setFilter('base')">Base</button>
-<button class="filter-btn" data-filter="gold" onclick="setFilter('gold')">Gold</button>
-<button class="filter-btn" data-filter="gummy" onclick="setFilter('gummy')">Gummy</button>
-<button class="filter-btn" data-filter="galaxy" onclick="setFilter('galaxy')">Galaxy</button>
-<button class="filter-btn" data-filter="holofoil" onclick="setFilter('holofoil')">Holofoil</button>
+<input type="text" class="search-box" id="search" placeholder="🔍 Search sprites..." oninput="applyFilters()">
+<button class="filter-btn active" data-filter="all" onclick="setCategoryFilter('all')">All</button>
+<button class="filter-btn" data-filter="base" onclick="setCategoryFilter('base')">Base</button>
+<button class="filter-btn" data-filter="gold" onclick="setCategoryFilter('gold')">Gold</button>
+<button class="filter-btn" data-filter="gummy" onclick="setCategoryFilter('gummy')">Gummy</button>
+<button class="filter-btn" data-filter="galaxy" onclick="setCategoryFilter('galaxy')">Galaxy</button>
+<button class="filter-btn" data-filter="holofoil" onclick="setCategoryFilter('holofoil')">Holofoil</button>
+<button class="btn-action btn-trade" onclick="openTradeCentral()">🔄 Trade Central</button>
 <button class="btn-action btn-export" onclick="exportData()">📤 Export</button>
 <button class="btn-action btn-import" onclick="document.getElementById('importFile').click()">📥 Import</button>
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
@@ -162,19 +220,19 @@ header h1{font-size:1.8em}
 </div>
 
 <div class="progress-section">
-<div class="progress-card">
+<div class="progress-card" data-player="rich" onclick="togglePlayerFilter('rich')">
 <h3 class="rich-color">👤 Rich <span class="count" id="richCount">0 / 66</span></h3>
 <div class="progress-bar"><div class="progress-fill rich-bg" id="richBar" style="width:0%"></div></div>
 </div>
-<div class="progress-card">
+<div class="progress-card" data-player="liz" onclick="togglePlayerFilter('liz')">
 <h3 class="liz-color">👤 Liz <span class="count" id="lizCount">0 / 66</span></h3>
 <div class="progress-bar"><div class="progress-fill liz-bg" id="lizBar" style="width:0%"></div></div>
 </div>
-<div class="progress-card">
+<div class="progress-card" data-player="mike" onclick="togglePlayerFilter('mike')">
 <h3 class="mike-color">👤 Mike <span class="count" id="mikeCount">0 / 66</span></h3>
 <div class="progress-bar"><div class="progress-fill mike-bg" id="mikeBar" style="width:0%"></div></div>
 </div>
-<div class="progress-card">
+<div class="progress-card" data-player="tyler" onclick="togglePlayerFilter('tyler')">
 <h3 class="tyler-color">👤 Tyler <span class="count" id="tylerCount">0 / 66</span></h3>
 <div class="progress-bar"><div class="progress-fill tyler-bg" id="tylerBar" style="width:0%"></div></div>
 </div>
@@ -186,9 +244,24 @@ header h1{font-size:1.8em}
 
 <div class="sprite-container" id="spriteContainer"></div>
 
+<!-- ===== TRADE CENTRAL MODAL ===== -->
+<div class="trade-overlay" id="tradeOverlay" onclick="if(event.target===this)closeTradeCentral()">
+<div class="trade-modal">
+<button class="trade-close" onclick="closeTradeCentral()">✕</button>
+<h2>🔄 TRADE CENTRAL</h2>
+<p class="subtitle">Find out who can drop what for whom — coordinate your trades!</p>
+
+<div class="trade-tabs" id="tradeTabs">
+<button class="trade-tab active" data-trade-mode="all" onclick="setTradeMode('all')">🌍 All Trades</button>
+<button class="trade-tab" data-trade-mode="mutual" onclick="setTradeMode('mutual')">🤝 Mutual Trades</button>
+</div>
+<div id="tradeContent"></div>
+</div>
+</div>
+
 <footer>
 <p>🎮 Fortnite Sprite Tracker · Built for Rich, Liz, Mike & Tyler</p>
-<p>Data saved locally in your browser · Use Export/Import to share progress</p>
+<p>Click a player's name to filter · Use Trade Central to find swap opportunities</p>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -196,96 +269,94 @@ header h1{font-size:1.8em}
 <script>
 // ===== SPRITE DATA — All 66 Sprites =====
 const SPRITES = [
-// --- BASE SPRITES (16) ---
-{id:"water",name:"Water Sprite",category:"base",rarity:"rare"},
-{id:"earth",name:"Earth Sprite",category:"base",rarity:"rare"},
-{id:"fire",name:"Fire Sprite",category:"base",rarity:"rare"},
-{id:"fishy",name:"Fishy Sprite",category:"base",rarity:"rare"},
-{id:"duck",name:"Duck Sprite",category:"base",rarity:"epic"},
-{id:"ghost",name:"Ghost Sprite",category:"base",rarity:"epic"},
-{id:"demon",name:"Demon Sprite",category:"base",rarity:"epic"},
-{id:"king",name:"King Sprite",category:"base",rarity:"epic"},
-{id:"aura",name:"Aura Sprite",category:"base",rarity:"epic"},
-{id:"striker",name:"Striker Sprite",category:"base",rarity:"epic"},
-{id:"punk",name:"Punk Sprite",category:"base",rarity:"legendary"},
-{id:"dream",name:"Dream Sprite",category:"base",rarity:"legendary"},
-{id:"boss",name:"Boss Sprite",category:"base",rarity:"legendary"},
-{id:"zeropoint",name:"Zero Point Sprite",category:"base",rarity:"mythic"},
-{id:"burntpeanut",name:"TheBurntPeanut Sprite",category:"base",rarity:"mythic"},
-{id:"grimreaper",name:"Grim Reaper Sprite",category:"base",rarity:"mythic"},
-// --- GOLD VARIANTS (15) ---
-{id:"gold_water",name:"Gold Water Sprite",category:"gold",rarity:"rare"},
-{id:"gold_earth",name:"Gold Earth Sprite",category:"gold",rarity:"rare"},
-{id:"gold_fire",name:"Gold Fire Sprite",category:"gold",rarity:"rare"},
-{id:"gold_fishy",name:"Gold Fishy Sprite",category:"gold",rarity:"rare"},
-{id:"gold_duck",name:"Gold Duck Sprite",category:"gold",rarity:"epic"},
-{id:"gold_ghost",name:"Gold Ghost Sprite",category:"gold",rarity:"epic"},
-{id:"gold_demon",name:"Gold Demon Sprite",category:"gold",rarity:"epic"},
-{id:"gold_king",name:"Gold King Sprite",category:"gold",rarity:"epic"},
-{id:"gold_aura",name:"Gold Aura Sprite",category:"gold",rarity:"epic"},
-{id:"gold_striker",name:"Gold Striker Sprite",category:"gold",rarity:"epic"},
-{id:"gold_punk",name:"Gold Punk Sprite",category:"gold",rarity:"legendary"},
-{id:"gold_dream",name:"Gold Dream Sprite",category:"gold",rarity:"legendary"},
-{id:"gold_boss",name:"Gold Boss Sprite",category:"gold",rarity:"legendary"},
-{id:"gold_zeropoint",name:"Gold Zero Point Sprite",category:"gold",rarity:"mythic"},
-{id:"gold_grimreaper",name:"Gold Grim Reaper Sprite",category:"gold",rarity:"mythic"},
-// --- GUMMY VARIANTS (15) ---
-{id:"gummy_water",name:"Gummy Water Sprite",category:"gummy",rarity:"rare"},
-{id:"gummy_earth",name:"Gummy Earth Sprite",category:"gummy",rarity:"rare"},
-{id:"gummy_fire",name:"Gummy Fire Sprite",category:"gummy",rarity:"rare"},
-{id:"gummy_fishy",name:"Gummy Fishy Sprite",category:"gummy",rarity:"rare"},
-{id:"gummy_duck",name:"Gummy Duck Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_ghost",name:"Gummy Ghost Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_demon",name:"Gummy Demon Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_king",name:"Gummy King Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_aura",name:"Gummy Aura Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_striker",name:"Gummy Striker Sprite",category:"gummy",rarity:"epic"},
-{id:"gummy_punk",name:"Gummy Punk Sprite",category:"gummy",rarity:"legendary"},
-{id:"gummy_dream",name:"Gummy Dream Sprite",category:"gummy",rarity:"legendary"},
-{id:"gummy_boss",name:"Gummy Boss Sprite",category:"gummy",rarity:"legendary"},
-{id:"gummy_zeropoint",name:"Gummy Zero Point Sprite",category:"gummy",rarity:"mythic"},
-{id:"gummy_grimreaper",name:"Gummy Grim Reaper Sprite",category:"gummy",rarity:"mythic"},
-// --- GALAXY VARIANTS (15) ---
-{id:"galaxy_water",name:"Galaxy Water Sprite",category:"galaxy",rarity:"rare"},
-{id:"galaxy_earth",name:"Galaxy Earth Sprite",category:"galaxy",rarity:"rare"},
-{id:"galaxy_fire",name:"Galaxy Fire Sprite",category:"galaxy",rarity:"rare"},
-{id:"galaxy_fishy",name:"Galaxy Fishy Sprite",category:"galaxy",rarity:"rare"},
-{id:"galaxy_duck",name:"Galaxy Duck Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_ghost",name:"Galaxy Ghost Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_demon",name:"Galaxy Demon Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_king",name:"Galaxy King Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_aura",name:"Galaxy Aura Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_striker",name:"Galaxy Striker Sprite",category:"galaxy",rarity:"epic"},
-{id:"galaxy_punk",name:"Galaxy Punk Sprite",category:"galaxy",rarity:"legendary"},
-{id:"galaxy_dream",name:"Galaxy Dream Sprite",category:"galaxy",rarity:"legendary"},
-{id:"galaxy_boss",name:"Galaxy Boss Sprite",category:"galaxy",rarity:"legendary"},
-{id:"galaxy_zeropoint",name:"Galaxy Zero Point Sprite",category:"galaxy",rarity:"mythic"},
-{id:"galaxy_grimreaper",name:"Galaxy Grim Reaper Sprite",category:"galaxy",rarity:"mythic"},
-// --- HOLOFOIL VARIANTS (5) ---
-{id:"holo_king",name:"Holofoil King Sprite",category:"holofoil",rarity:"epic"},
-{id:"holo_striker",name:"Holofoil Striker Sprite",category:"holofoil",rarity:"epic"},
-{id:"holo_ghost",name:"Holofoil Ghost Sprite",category:"holofoil",rarity:"epic"},
-{id:"holo_water",name:"Holofoil Water Sprite",category:"holofoil",rarity:"rare"},
-{id:"holo_zeropoint",name:"Holofoil Zero Point Sprite",category:"holofoil",rarity:"mythic"},
+{id:"water",name:"Water Sprite",category:"base",rarity:"rare",icon:"💧"},
+{id:"earth",name:"Earth Sprite",category:"base",rarity:"rare",icon:"🌍"},
+{id:"fire",name:"Fire Sprite",category:"base",rarity:"rare",icon:"🔥"},
+{id:"fishy",name:"Fishy Sprite",category:"base",rarity:"rare",icon:"🐟"},
+{id:"duck",name:"Duck Sprite",category:"base",rarity:"epic",icon:"🦆"},
+{id:"ghost",name:"Ghost Sprite",category:"base",rarity:"epic",icon:"👻"},
+{id:"demon",name:"Demon Sprite",category:"base",rarity:"epic",icon:"😈"},
+{id:"king",name:"King Sprite",category:"base",rarity:"epic",icon:"👑"},
+{id:"aura",name:"Aura Sprite",category:"base",rarity:"epic",icon:"⚡"},
+{id:"striker",name:"Striker Sprite",category:"base",rarity:"epic",icon:"⚽"},
+{id:"punk",name:"Punk Sprite",category:"base",rarity:"legendary",icon:"🎸"},
+{id:"dream",name:"Dream Sprite",category:"base",rarity:"legendary",icon:"💤"},
+{id:"boss",name:"Boss Sprite",category:"base",rarity:"legendary",icon:"💪"},
+{id:"zeropoint",name:"Zero Point Sprite",category:"base",rarity:"mythic",icon:"🔮"},
+{id:"burntpeanut",name:"TheBurntPeanut Sprite",category:"base",rarity:"mythic",icon:"🥜"},
+{id:"grimreaper",name:"Grim Reaper Sprite",category:"base",rarity:"mythic",icon:"💀"},
+{id:"gold_water",name:"Gold Water Sprite",category:"gold",rarity:"rare",icon:"💧"},
+{id:"gold_earth",name:"Gold Earth Sprite",category:"gold",rarity:"rare",icon:"🌍"},
+{id:"gold_fire",name:"Gold Fire Sprite",category:"gold",rarity:"rare",icon:"🔥"},
+{id:"gold_fishy",name:"Gold Fishy Sprite",category:"gold",rarity:"rare",icon:"🐟"},
+{id:"gold_duck",name:"Gold Duck Sprite",category:"gold",rarity:"epic",icon:"🦆"},
+{id:"gold_ghost",name:"Gold Ghost Sprite",category:"gold",rarity:"epic",icon:"👻"},
+{id:"gold_demon",name:"Gold Demon Sprite",category:"gold",rarity:"epic",icon:"😈"},
+{id:"gold_king",name:"Gold King Sprite",category:"gold",rarity:"epic",icon:"👑"},
+{id:"gold_aura",name:"Gold Aura Sprite",category:"gold",rarity:"epic",icon:"⚡"},
+{id:"gold_striker",name:"Gold Striker Sprite",category:"gold",rarity:"epic",icon:"⚽"},
+{id:"gold_punk",name:"Gold Punk Sprite",category:"gold",rarity:"legendary",icon:"🎸"},
+{id:"gold_dream",name:"Gold Dream Sprite",category:"gold",rarity:"legendary",icon:"💤"},
+{id:"gold_boss",name:"Gold Boss Sprite",category:"gold",rarity:"legendary",icon:"💪"},
+{id:"gold_zeropoint",name:"Gold Zero Point Sprite",category:"gold",rarity:"mythic",icon:"🔮"},
+{id:"gold_grimreaper",name:"Gold Grim Reaper Sprite",category:"gold",rarity:"mythic",icon:"💀"},
+{id:"gummy_water",name:"Gummy Water Sprite",category:"gummy",rarity:"rare",icon:"💧"},
+{id:"gummy_earth",name:"Gummy Earth Sprite",category:"gummy",rarity:"rare",icon:"🌍"},
+{id:"gummy_fire",name:"Gummy Fire Sprite",category:"gummy",rarity:"rare",icon:"🔥"},
+{id:"gummy_fishy",name:"Gummy Fishy Sprite",category:"gummy",rarity:"rare",icon:"🐟"},
+{id:"gummy_duck",name:"Gummy Duck Sprite",category:"gummy",rarity:"epic",icon:"🦆"},
+{id:"gummy_ghost",name:"Gummy Ghost Sprite",category:"gummy",rarity:"epic",icon:"👻"},
+{id:"gummy_demon",name:"Gummy Demon Sprite",category:"gummy",rarity:"epic",icon:"😈"},
+{id:"gummy_king",name:"Gummy King Sprite",category:"gummy",rarity:"epic",icon:"👑"},
+{id:"gummy_aura",name:"Gummy Aura Sprite",category:"gummy",rarity:"epic",icon:"⚡"},
+{id:"gummy_striker",name:"Gummy Striker Sprite",category:"gummy",rarity:"epic",icon:"⚽"},
+{id:"gummy_punk",name:"Gummy Punk Sprite",category:"gummy",rarity:"legendary",icon:"🎸"},
+{id:"gummy_dream",name:"Gummy Dream Sprite",category:"gummy",rarity:"legendary",icon:"💤"},
+{id:"gummy_boss",name:"Gummy Boss Sprite",category:"gummy",rarity:"legendary",icon:"💪"},
+{id:"gummy_zeropoint",name:"Gummy Zero Point Sprite",category:"gummy",rarity:"mythic",icon:"🔮"},
+{id:"gummy_grimreaper",name:"Gummy Grim Reaper Sprite",category:"gummy",rarity:"mythic",icon:"💀"},
+{id:"galaxy_water",name:"Galaxy Water Sprite",category:"galaxy",rarity:"rare",icon:"💧"},
+{id:"galaxy_earth",name:"Galaxy Earth Sprite",category:"galaxy",rarity:"rare",icon:"🌍"},
+{id:"galaxy_fire",name:"Galaxy Fire Sprite",category:"galaxy",rarity:"rare",icon:"🔥"},
+{id:"galaxy_fishy",name:"Galaxy Fishy Sprite",category:"galaxy",rarity:"rare",icon:"🐟"},
+{id:"galaxy_duck",name:"Galaxy Duck Sprite",category:"galaxy",rarity:"epic",icon:"🦆"},
+{id:"galaxy_ghost",name:"Galaxy Ghost Sprite",category:"galaxy",rarity:"epic",icon:"👻"},
+{id:"galaxy_demon",name:"Galaxy Demon Sprite",category:"galaxy",rarity:"epic",icon:"😈"},
+{id:"galaxy_king",name:"Galaxy King Sprite",category:"galaxy",rarity:"epic",icon:"👑"},
+{id:"galaxy_aura",name:"Galaxy Aura Sprite",category:"galaxy",rarity:"epic",icon:"⚡"},
+{id:"galaxy_striker",name:"Galaxy Striker Sprite",category:"galaxy",rarity:"epic",icon:"⚽"},
+{id:"galaxy_punk",name:"Galaxy Punk Sprite",category:"galaxy",rarity:"legendary",icon:"🎸"},
+{id:"galaxy_dream",name:"Galaxy Dream Sprite",category:"galaxy",rarity:"legendary",icon:"💤"},
+{id:"galaxy_boss",name:"Galaxy Boss Sprite",category:"galaxy",rarity:"legendary",icon:"💪"},
+{id:"galaxy_zeropoint",name:"Galaxy Zero Point Sprite",category:"galaxy",rarity:"mythic",icon:"🔮"},
+{id:"galaxy_grimreaper",name:"Galaxy Grim Reaper Sprite",category:"galaxy",rarity:"mythic",icon:"💀"},
+{id:"holo_king",name:"Holofoil King Sprite",category:"holofoil",rarity:"epic",icon:"👑"},
+{id:"holo_striker",name:"Holofoil Striker Sprite",category:"holofoil",rarity:"epic",icon:"⚽"},
+{id:"holo_ghost",name:"Holofoil Ghost Sprite",category:"holofoil",rarity:"epic",icon:"👻"},
+{id:"holo_water",name:"Holofoil Water Sprite",category:"holofoil",rarity:"rare",icon:"💧"},
+{id:"holo_zeropoint",name:"Holofoil Zero Point Sprite",category:"holofoil",rarity:"mythic",icon:"🔮"},
 ];
 
 const PLAYERS = ["rich","liz","mike","tyler"];
-const STORAGE_KEY = "fortnite_sprite_tracker_v2";
-let currentFilter = "all";
+const PLAYER_NAMES = {rich:"Rich",liz:"Liz",mike:"Mike",tyler:"Tyler"};
+const PLAYER_COLORS = {rich:"purple",liz:"pink",mike:"blue",tyler:"orange"};
+const STORAGE_KEY = "fortnite_sprite_tracker_v3";
+let currentCategoryFilter = "all";
+let activePlayerFilter = null; // which player is being filtered
+let playerMode = "has"; // "has" or "needs"
+let tradeMode = "all"; // "all" or "mutual"
 let state = {};
 
 // ===== INIT STATE =====
 function initState(){
 const saved = localStorage.getItem(STORAGE_KEY);
 if(saved){try{state=JSON.parse(saved)}catch(e){state={}}}
-// Ensure all sprites/players exist
 SPRITES.forEach(s=>{PLAYERS.forEach(p=>{
 if(!state[s.id])state[s.id]={};
 if(typeof state[s.id][p]!=="boolean")state[s.id][p]=false;
 });});
 saveState();
 }
-
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 
 // ===== RENDER SPRITE CARDS =====
@@ -308,13 +379,13 @@ html+=`<div class="category-header" id="cat-${cat.id}">
 catSprites.forEach(s=>{
 const badgeClass="badge-"+s.category;
 html+=`<div class="sprite-card" data-id="${s.id}" data-category="${s.category}" data-rarity="${s.rarity}" data-name="${s.name.toLowerCase()}">
-<div class="sprite-name">${s.name}<span class="sprite-type-badge ${badgeClass}">${s.category}</span></div>
+<div class="sprite-name">${s.icon||''} ${s.name}<span class="sprite-type-badge ${badgeClass}">${s.category}</span></div>
 <div class="checkboxes">`;
 PLAYERS.forEach(p=>{
 const checked=state[s.id]&&state[s.id][p]?"checked":"";
 html+=`<div class="cb-wrapper" data-player="${p}">
 <span class="cb-label">${p}</span>
-<div class="cb-custom ${checked}" data-sprite="${s.id}" data-player="${p}" onclick="toggleCheckbox('${s.id}','${p}')" title="Click to toggle ${p}'s ${s.name}"></div>
+<div class="cb-custom ${checked}" data-sprite="${s.id}" data-player="${p}" onclick="toggleCheckbox('${s.id}','${p}')" title="${PLAYER_NAMES[p]}'s ${s.name}"></div>
 </div>`;
 });
 html+=`</div></div>`;
@@ -322,7 +393,7 @@ html+=`</div></div>`;
 html+=`</div>`;
 });
 container.innerHTML=html;
-updateProgress();
+applyFilters();
 }
 
 // ===== TOGGLE CHECKBOX =====
@@ -330,10 +401,8 @@ function toggleCheckbox(spriteId,player){
 if(!state[spriteId])state[spriteId]={};
 state[spriteId][player]=!state[spriteId][player];
 saveState();
-// Update visual
 const cb=document.querySelector(`.cb-custom[data-sprite="${spriteId}"][data-player="${player}"]`);
-if(state[spriteId][player]){cb.classList.add("checked")}
-else{cb.classList.remove("checked")}
+if(state[spriteId][player]){cb.classList.add("checked")}else{cb.classList.remove("checked")}
 updateProgress();
 }
 
@@ -355,23 +424,75 @@ document.getElementById("teamCount").textContent=`${counts.total} / ${totalMax}`
 document.getElementById("teamBar").style.width=teamPct+"%";
 }
 
-// ===== SEARCH & FILTER =====
-function setFilter(filter){
-currentFilter=filter;
+// ===== PLAYER FILTER (click name to filter) =====
+function togglePlayerFilter(player){
+if(activePlayerFilter===player){
+// Turn off filter
+activePlayerFilter=null;
+}else{
+activePlayerFilter=player;
+playerMode="has"; // default to "has" when first clicked
+}
+updatePlayerTagUI();
+applyFilters();
+}
+
+function setPlayerMode(mode){
+playerMode=mode;
+updatePlayerTagUI();
+applyFilters();
+}
+
+function updatePlayerTagUI(){
+document.querySelectorAll(".player-tag").forEach(tag=>{
+const p=tag.dataset.player;
+const isActive=p===activePlayerFilter;
+tag.classList.toggle("active",isActive);
+const modeSpan=tag.querySelector(".tag-mode");
+if(isActive){modeSpan.textContent=playerMode==="has"?"✅ HAS":"❌ NEEDS"}
+else{modeSpan.textContent=""}
+});
+// Show/hide mode toggles
+const modeToggles=document.getElementById("modeToggles");
+modeToggles.style.display=activePlayerFilter?"flex":"none";
+if(activePlayerFilter){
+document.querySelectorAll(".mode-btn").forEach(btn=>{
+btn.classList.toggle("active",btn.dataset.mode===playerMode);
+});
+}
+// Highlight progress card
+document.querySelectorAll(".progress-card").forEach(card=>{
+card.classList.toggle("active",card.dataset.player===activePlayerFilter);
+});
+}
+
+// ===== CATEGORY FILTER =====
+function setCategoryFilter(filter){
+currentCategoryFilter=filter;
 document.querySelectorAll(".filter-btn").forEach(b=>{
 b.classList.toggle("active",b.dataset.filter===filter);
 });
-filterSprites();
+applyFilters();
 }
 
-function filterSprites(){
+// ===== APPLY ALL FILTERS =====
+function applyFilters(){
 const searchTerm=document.getElementById("search").value.toLowerCase();
 document.querySelectorAll(".sprite-card").forEach(card=>{
+const id=card.dataset.id;
 const name=card.dataset.name;
 const cat=card.dataset.category;
+// Search
 const matchesSearch=name.includes(searchTerm);
-const matchesFilter=currentFilter==="all"||cat===currentFilter;
-card.classList.toggle("hidden",!(matchesSearch&&matchesFilter));
+// Category filter
+const matchesCat=currentCategoryFilter==="all"||cat===currentCategoryFilter;
+// Player filter
+let matchesPlayer=true;
+if(activePlayerFilter){
+const has=state[id]&&state[id][activePlayerFilter];
+matchesPlayer=playerMode==="has"?has:!has;
+}
+card.classList.toggle("hidden",!(matchesSearch&&matchesCat&&matchesPlayer));
 });
 // Hide empty category headers
 document.querySelectorAll(".category-header").forEach(h=>{
@@ -382,70 +503,141 @@ grid.style.display=visible>0?"":"none";
 });
 }
 
-// ===== EXPORT / IMPORT =====
-function exportData(){
-const data={exportDate:new Date().toISOString(),version:"2.0",players:PLAYERS,sprites:state};
-const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-a.href=url;a.download="sprite-tracker-export.json";
-document.body.appendChild(a);a.click();document.body.removeChild(a);
-URL.revokeObjectURL(url);
-showToast("✅ Progress exported! Share the file with your team.","success");
+// ===== TRADE CENTRAL =====
+function openTradeCentral(){
+document.getElementById("tradeOverlay").classList.add("show");
+renderTrades();
+}
+function closeTradeCentral(){
+document.getElementById("tradeOverlay").classList.remove("show");
+}
+function setTradeMode(mode){
+tradeMode=mode;
+document.querySelectorAll(".trade-tab").forEach(t=>{
+t.classList.toggle("active",t.dataset.tradeMode===mode);
+});
+renderTrades();
 }
 
+function renderTrades(){
+const content=document.getElementById("tradeContent");
+// For each pair of players, find what one has that the other needs
+const pairs=[];
+for(let i=0;i<PLAYERS.length;i++){
+for(let j=i+1;j<PLAYERS.length;j++){
+const a=PLAYERS[i],b=PLAYERS[j];
+// What a has that b needs
+const aGives=SPRITES.filter(s=>state[s.id]&&state[s.id][a]&&!state[s.id][b]);
+// What b has that a needs
+const bGives=SPRITES.filter(s=>state[s.id]&&state[s.id][b]&&!state[s.id][a]);
+if(aGives.length===0&&bGives.length===0)continue;
+const isMutual=aGives.length>0&&bGives.length>0;
+pairs.push({a,b,aGives,bGives,isMutual});
+});
+}
+
+// Sort: mutual trades first, then by most trade items
+pairs.sort((x,y)=>{
+if(x.isMutual&&!y.isMutual)return -1;
+if(!x.isMutual&&y.isMutual)return 1;
+return(y.aGives.length+y.bGives.length)-(x.aGives.length+x.bGives.length);
+});
+
+let filteredPairs=pairs;
+if(tradeMode==="mutual"){
+filteredPairs=pairs.filter(p=>p.isMutual);
+}
+
+if(filteredPairs.length===0){
+content.innerHTML='<div class="no-trades">🎉 No trade opportunities found! Either everyone has everything, or nobody has overlapping extras yet.</div>';
+return;
+}
+
+let html="";
+filteredPairs.forEach(pair=>{
+const {a,b,aGives,bGives,isMutual}=pair;
+html+=`<div class="trade-pair-section">
+<div class="trade-pair-header">
+<span class="${a}-color" style="font-weight:700">${PLAYER_NAMES[a]}</span>
+<span class="arrow">⇄</span>
+<span class="${b}-color" style="font-weight:700">${PLAYER_NAMES[b]}</span>
+${isMutual?'<span class="mutual-badge">🤝 MUTUAL TRADE</span>':''}
+<span style="margin-left:auto;font-size:.8em;color:var(--text-dim)">${aGives.length+bGives.length} possible swaps</span>
+</div>
+<div class="trade-list">`;
+
+// What a gives to b
+aGives.forEach(s=>{
+html+=`<div class="trade-item" style="border-left-color:var(--${PLAYER_COLORS[a]})">
+<span class="sprite-icon-sm">${s.icon||'⭐'}</span>
+<span class="trade-sprite-name">${s.name}</span>
+<span class="trade-tag tag-has" style="background:rgba(var(--${PLAYER_COLORS[a]}-rgb,157,78,221),.15)">${PLAYER_NAMES[a]} drops → ${PLAYER_NAMES[b]}</span>
+</div>`;
+});
+// What b gives to a
+bGives.forEach(s=>{
+html+=`<div class="trade-item" style="border-left-color:var(--${PLAYER_COLORS[b]})">
+<span class="sprite-icon-sm">${s.icon||'⭐'}</span>
+<span class="trade-sprite-name">${s.name}</span>
+<span class="trade-tag tag-needs">${PLAYER_NAMES[b]} drops → ${PLAYER_NAMES[a]}</span>
+</div>`;
+});
+html+=`</div></div>`;
+});
+content.innerHTML=html;
+}
+
+// ===== EXPORT / IMPORT =====
+function exportData(){
+const data={exportDate:new Date().toISOString(),version:"3.0",players:PLAYERS,sprites:state};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");a.href=url;a.download="sprite-tracker-export.json";
+document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+showToast("✅ Progress exported!","success");
+}
 function importData(event){
-const file=event.target.files[0];
-if(!file)return;
+const file=event.target.files[0];if(!file)return;
 const reader=new FileReader();
 reader.onload=function(e){
 try{
 const data=JSON.parse(e.target.result);
 if(data.sprites){state=data.sprites}
-else if(Object.keys(data).length>0){state=data}
-// Ensure structure
+else{state=data}
 SPRITES.forEach(s=>{PLAYERS.forEach(p=>{
 if(!state[s.id])state[s.id]={};
 if(typeof state[s.id][p]!=="boolean")state[s.id][p]=false;
 });});
-saveState();
-renderSprites();
-showToast("✅ Progress imported successfully!","success");
-}catch(err){
-showToast("❌ Invalid file format.","error");
-}
+saveState();renderSprites();updateProgress();
+showToast("✅ Progress imported!","success");
+}catch(err){showToast("❌ Invalid file format.","error")}
 };
-reader.readAsText(file);
-event.target.value="";
+reader.readAsText(file);event.target.value="";
 }
-
 function resetData(){
-if(confirm("⚠️ Are you sure you want to reset ALL progress for Rich, Liz, Mike, and Tyler? This cannot be undone.")){
-state={};
-initState();
-renderSprites();
+if(confirm("⚠️ Reset ALL progress for Rich, Liz, Mike, and Tyler?")){
+state={};initState();renderSprites();updateProgress();
 showToast("✅ All progress reset.","success");
 }
 }
 
-// ===== TOAST NOTIFICATION =====
+// ===== TOAST =====
 function showToast(msg,type){
 const toast=document.getElementById("toast");
-toast.textContent=msg;
-toast.className="toast show"+(type==="error"?" error":"");
+toast.textContent=msg;toast.className="toast show"+(type==="error"?" error":"");
 setTimeout(()=>{toast.className="toast"},3000);
 }
 
-// ===== KEYBOARD SHORTCUT: '/' focuses search =====
+// ===== KEYBOARD =====
 document.addEventListener("keydown",e=>{
-if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){
-e.preventDefault();document.getElementById("search").focus();
+if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();document.getElementById("search").focus()}
+if(e.key==="Escape"){
+if(document.getElementById("tradeOverlay").classList.contains("show"))closeTradeCentral();
 }
 });
 
 // ===== INIT =====
-initState();
-renderSprites();
+initState();renderSprites();updateProgress();
 </script>
 </body>
 </html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Fortnite Sprite Tracker</title>
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding-bottom:40px}
+:root{
+--purple:#9d4edd;--blue:#00f5ff;--pink:#ff006e;--gold:#ffd60a;
+--green:#06ffa5;--orange:#ff8500;--red:#ef233c;
+--dark:#0a0a1a;--card:#14142b;--card-light:#1a1a3a;
+--border:#2a2a4a;--text:#e0e0e0;--text-dim:#8888aa;
+}
+
+/* ===== HEADER ===== */
+header{background:linear-gradient(135deg,#1a0033 0%,#0a0a1a 50%,#001a33 100%);
+padding:30px 20px;text-align:center;border-bottom:3px solid var(--purple);position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background:radial-gradient(circle at 20% 50%,rgba(157,78,221,0.15) 0%,transparent 50%),
+radial-gradient(circle at 80% 50%,rgba(0,245,255,0.1) 0%,transparent 50%);pointer-events:none}
+header h1{font-size:2.5em;font-weight:800;
+background:linear-gradient(90deg,var(--purple),var(--blue),var(--pink));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+text-shadow:0 0 30px rgba(157,78,221,0.5);margin-bottom:5px;letter-spacing:2px}
+header p{color:var(--text-dim);font-size:1.1em}
+.player-tags{display:flex;justify-content:center;gap:15px;margin-top:15px;flex-wrap:wrap}
+.player-tag{padding:6px 16px;border-radius:20px;font-weight:600;font-size:.9em;cursor:pointer;transition:all .3s}
+.player-tag.rich{background:rgba(157,78,221,.2);border:2px solid var(--purple);color:var(--purple)}
+.player-tag.liz{background:rgba(255,0,110,.2);border:2px solid var(--pink);color:var(--pink)}
+.player-tag.mike{background:rgba(0,245,255,.2);border:2px solid var(--blue);color:var(--blue)}
+.player-tag.tyler{background:rgba(255,133,0,.2);border:2px solid var(--orange);color:var(--orange)}
+
+/* ===== CONTROLS BAR ===== */
+.controls-bar{position:sticky;top:0;z-index:100;background:rgba(10,10,26,.95);
+backdrop-filter:blur(10px);padding:15px 20px;display:flex;gap:12px;justify-content:center;
+align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.search-box{flex:1;min-width:200px;max-width:400px;padding:10px 16px;background:var(--card);
+border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:1em;transition:border-color .3s}
+.search-box:focus{outline:none;border-color:var(--purple);box-shadow:0 0 10px rgba(157,78,221,.3)}
+.filter-btn{padding:8px 16px;background:var(--card);border:2px solid var(--border);border-radius:8px;
+color:var(--text-dim);cursor:pointer;font-size:.85em;font-weight:600;transition:all .3s;white-space:nowrap}
+.filter-btn:hover,.filter-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(157,78,221,.1)}
+.btn-action{padding:8px 16px;border-radius:8px;font-size:.85em;font-weight:600;cursor:pointer;transition:all .3s;border:2px solid}
+.btn-export{background:rgba(6,255,165,.1);border-color:var(--green);color:var(--green)}
+.btn-export:hover{background:rgba(6,255,165,.2);box-shadow:0 0 10px rgba(6,255,165,.3)}
+.btn-import{background:rgba(255,213,10,.1);border-color:var(--gold);color:var(--gold)}
+.btn-import:hover{background:rgba(255,213,10,.2);box-shadow:0 0 10px rgba(255,213,10,.3)}
+.btn-reset{background:rgba(239,35,60,.1);border-color:var(--red);color:var(--red)}
+.btn-reset:hover{background:rgba(239,35,60,.2);box-shadow:0 0 10px rgba(239,35,60,.3)}
+
+/* ===== PROGRESS SECTION ===== */
+.progress-section{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;max-width:1200px;margin:0 auto}
+.progress-card{background:var(--card);border-radius:12px;padding:20px;border:2px solid var(--border);transition:transform .3s}
+.progress-card:hover{transform:translateY(-3px)}
+.progress-card h3{font-size:1.1em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.progress-card .count{font-size:.9em;color:var(--text-dim)}
+.progress-bar{width:100%;height:12px;background:var(--card-light);border-radius:6px;overflow:hidden;position:relative}
+.progress-fill{height:100%;border-radius:6px;transition:width .5s ease;position:relative}
+.progress-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 2s infinite}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.rich-color{color:var(--purple)!important}.rich-bg{background:linear-gradient(90deg,#7b2cbf,var(--purple))!important}
+.liz-color{color:var(--pink)!important}.liz-bg{background:linear-gradient(90deg,#c9184a,var(--pink))!important}
+.mike-color{color:var(--blue)!important}.mike-bg{background:linear-gradient(90deg,#0077b6,var(--blue))!important}
+.tyler-color{color:var(--orange)!important}.tyler-bg{background:linear-gradient(90deg,#cc6600,var(--orange))!important}
+.team-color{color:var(--green)!important}.team-bg{background:linear-gradient(90deg,#02b88a,var(--green))!important}
+
+/* ===== SPRITE GRID ===== */
+.sprite-container{max-width:1200px;margin:0 auto;padding:0 20px}
+.category-header{font-size:1.4em;font-weight:700;margin:30px 0 15px;padding:10px 0;
+border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
+.category-icon{font-size:1.2em}
+.category-count{margin-left:auto;font-size:.7em;color:var(--text-dim);font-weight:400}
+.sprite-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.sprite-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:14px;transition:all .3s;position:relative;overflow:hidden}
+.sprite-card:hover{border-color:var(--purple);transform:scale(1.02);box-shadow:0 4px 20px rgba(157,78,221,.2)}
+.sprite-card.hidden{display:none}
+.sprite-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sprite-card[data-rarity="common"]::before{background:#b0b0b0}
+.sprite-card[data-rarity="rare"]::before{background:var(--blue)}
+.sprite-card[data-rarity="epic"]::before{background:var(--purple)}
+.sprite-card[data-rarity="legendary"]::before{background:var(--gold)}
+.sprite-card[data-rarity="mythic"]::before{background:var(--red)}
+.sprite-card[data-category="gold"]::before{background:linear-gradient(90deg,#ffd700,#ffaa00)}
+.sprite-card[data-category="gummy"]::before{background:linear-gradient(90deg,#ff006e,#06ffa5)}
+.sprite-card[data-category="galaxy"]::before{background:linear-gradient(90deg,#7b2cbf,#00f5ff)}
+.sprite-card[data-category="holofoil"]::before{background:linear-gradient(90deg,#ff006e,#9d4edd,#00f5ff,#06ffa5)}
+.sprite-name{font-size:1em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sprite-type-badge{font-size:.65em;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase}
+.badge-base{background:rgba(157,78,221,.2);color:var(--purple)}
+.badge-gold{background:rgba(255,215,0,.2);color:var(--gold)}
+.badge-gummy{background:rgba(255,0,110,.2);color:var(--pink)}
+.badge-galaxy{background:rgba(0,245,255,.2);color:var(--blue)}
+.badge-holofoil{background:linear-gradient(90deg,rgba(255,0,110,.2),rgba(0,245,255,.2));color:#fff}
+.checkboxes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cb-wrapper{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cb-label{font-size:.72em;font-weight:600;text-transform:capitalize}
+.cb-custom{width:26px;height:26px;border:2px solid var(--border);border-radius:6px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;transition:all .3s;background:var(--card-light)}
+.cb-custom:hover{border-color:var(--purple);transform:scale(1.1)}
+.cb-custom.checked{border-width:0}
+.cb-wrapper[data-player="rich"] .cb-custom.checked{background:var(--purple);box-shadow:0 0 10px rgba(157,78,221,.5)}
+.cb-wrapper[data-player="liz"] .cb-custom.checked{background:var(--pink);box-shadow:0 0 10px rgba(255,0,110,.5)}
+.cb-wrapper[data-player="mike"] .cb-custom.checked{background:var(--blue);box-shadow:0 0 10px rgba(0,245,255,.5)}
+.cb-wrapper[data-player="tyler"] .cb-custom.checked{background:var(--orange);box-shadow:0 0 10px rgba(255,133,0,.5)}
+.cb-custom.checked::after{content:'✓';color:white;font-size:15px;font-weight:bold}
+.cb-custom{user-select:none;-webkit-user-select:none}
+
+/* ===== FOOTER ===== */
+footer{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:.85em;border-top:1px solid var(--border);margin-top:40px}
+footer a{color:var(--blue);text-decoration:none}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
+background:var(--card);border:2px solid var(--green);color:var(--green);padding:12px 24px;
+border-radius:8px;font-weight:600;z-index:9999;transition:transform .4s ease;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{border-color:var(--red);color:var(--red)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+header h1{font-size:1.8em}
+.sprite-grid{grid-template-columns:1fr}
+.controls-bar{padding:10px}
+.filter-btn,.btn-action{font-size:.75em;padding:6px 10px}
+.progress-section{grid-template-columns:1fr 1fr}
+.checkboxes{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:400px){
+.progress-section{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🎮 SPRITE TRACKER</h1>
+<p>Fortnite Chapter 7 · Season 3 · Collection Checklist</p>
+<div class="player-tags">
+<span class="player-tag rich">👤 Rich</span>
+<span class="player-tag liz">👤 Liz</span>
+<span class="player-tag mike">👤 Mike</span>
+<span class="player-tag tyler">👤 Tyler</span>
+</div>
+</header>
+
+<div class="controls-bar">
+<input type="text" class="search-box" id="search" placeholder="🔍 Search sprites..." oninput="filterSprites()">
+<button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+<button class="filter-btn" data-filter="base" onclick="setFilter('base')">Base</button>
+<button class="filter-btn" data-filter="gold" onclick="setFilter('gold')">Gold</button>
+<button class="filter-btn" data-filter="gummy" onclick="setFilter('gummy')">Gummy</button>
+<button class="filter-btn" data-filter="galaxy" onclick="setFilter('galaxy')">Galaxy</button>
+<button class="filter-btn" data-filter="holofoil" onclick="setFilter('holofoil')">Holofoil</button>
+<button class="btn-action btn-export" onclick="exportData()">📤 Export</button>
+<button class="btn-action btn-import" onclick="document.getElementById('importFile').click()">📥 Import</button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+<button class="btn-action btn-reset" onclick="resetData()">🗑️ Reset</button>
+</div>
+
+<div class="progress-section">
+<div class="progress-card">
+<h3 class="rich-color">👤 Rich <span class="count" id="richCount">0 / 66</span></h3>
+<div class="progress-bar"><div class="progress-fill rich-bg" id="richBar" style="width:0%"></div></div>
+</div>
+<div class="progress-card">
+<h3 class="liz-color">👤 Liz <span class="count" id="lizCount">0 / 66</span></h3>
+<div class="progress-bar"><div class="progress-fill liz-bg" id="lizBar" style="width:0%"></div></div>
+</div>
+<div class="progress-card">
+<h3 class="mike-color">👤 Mike <span class="count" id="mikeCount">0 / 66</span></h3>
+<div class="progress-bar"><div class="progress-fill mike-bg" id="mikeBar" style="width:0%"></div></div>
+</div>
+<div class="progress-card">
+<h3 class="tyler-color">👤 Tyler <span class="count" id="tylerCount">0 / 66</span></h3>
+<div class="progress-bar"><div class="progress-fill tyler-bg" id="tylerBar" style="width:0%"></div></div>
+</div>
+<div class="progress-card">
+<h3 class="team-color">🏆 Team Total <span class="count" id="teamCount">0 / 264</span></h3>
+<div class="progress-bar"><div class="progress-fill team-bg" id="teamBar" style="width:0%"></div></div>
+</div>
+</div>
+
+<div class="sprite-container" id="spriteContainer"></div>
+
+<footer>
+<p>🎮 Fortnite Sprite Tracker · Built for Rich, Liz, Mike & Tyler</p>
+<p>Data saved locally in your browser · Use Export/Import to share progress</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== SPRITE DATA — All 66 Sprites =====
+const SPRITES = [
+// --- BASE SPRITES (16) ---
+{id:"water",name:"Water Sprite",category:"base",rarity:"rare"},
+{id:"earth",name:"Earth Sprite",category:"base",rarity:"rare"},
+{id:"fire",name:"Fire Sprite",category:"base",rarity:"rare"},
+{id:"fishy",name:"Fishy Sprite",category:"base",rarity:"rare"},
+{id:"duck",name:"Duck Sprite",category:"base",rarity:"epic"},
+{id:"ghost",name:"Ghost Sprite",category:"base",rarity:"epic"},
+{id:"demon",name:"Demon Sprite",category:"base",rarity:"epic"},
+{id:"king",name:"King Sprite",category:"base",rarity:"epic"},
+{id:"aura",name:"Aura Sprite",category:"base",rarity:"epic"},
+{id:"striker",name:"Striker Sprite",category:"base",rarity:"epic"},
+{id:"punk",name:"Punk Sprite",category:"base",rarity:"legendary"},
+{id:"dream",name:"Dream Sprite",category:"base",rarity:"legendary"},
+{id:"boss",name:"Boss Sprite",category:"base",rarity:"legendary"},
+{id:"zeropoint",name:"Zero Point Sprite",category:"base",rarity:"mythic"},
+{id:"burntpeanut",name:"TheBurntPeanut Sprite",category:"base",rarity:"mythic"},
+{id:"grimreaper",name:"Grim Reaper Sprite",category:"base",rarity:"mythic"},
+// --- GOLD VARIANTS (15) ---
+{id:"gold_water",name:"Gold Water Sprite",category:"gold",rarity:"rare"},
+{id:"gold_earth",name:"Gold Earth Sprite",category:"gold",rarity:"rare"},
+{id:"gold_fire",name:"Gold Fire Sprite",category:"gold",rarity:"rare"},
+{id:"gold_fishy",name:"Gold Fishy Sprite",category:"gold",rarity:"rare"},
+{id:"gold_duck",name:"Gold Duck Sprite",category:"gold",rarity:"epic"},
+{id:"gold_ghost",name:"Gold Ghost Sprite",category:"gold",rarity:"epic"},
+{id:"gold_demon",name:"Gold Demon Sprite",category:"gold",rarity:"epic"},
+{id:"gold_king",name:"Gold King Sprite",category:"gold",rarity:"epic"},
+{id:"gold_aura",name:"Gold Aura Sprite",category:"gold",rarity:"epic"},
+{id:"gold_striker",name:"Gold Striker Sprite",category:"gold",rarity:"epic"},
+{id:"gold_punk",name:"Gold Punk Sprite",category:"gold",rarity:"legendary"},
+{id:"gold_dream",name:"Gold Dream Sprite",category:"gold",rarity:"legendary"},
+{id:"gold_boss",name:"Gold Boss Sprite",category:"gold",rarity:"legendary"},
+{id:"gold_zeropoint",name:"Gold Zero Point Sprite",category:"gold",rarity:"mythic"},
+{id:"gold_grimreaper",name:"Gold Grim Reaper Sprite",category:"gold",rarity:"mythic"},
+// --- GUMMY VARIANTS (15) ---
+{id:"gummy_water",name:"Gummy Water Sprite",category:"gummy",rarity:"rare"},
+{id:"gummy_earth",name:"Gummy Earth Sprite",category:"gummy",rarity:"rare"},
+{id:"gummy_fire",name:"Gummy Fire Sprite",category:"gummy",rarity:"rare"},
+{id:"gummy_fishy",name:"Gummy Fishy Sprite",category:"gummy",rarity:"rare"},
+{id:"gummy_duck",name:"Gummy Duck Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_ghost",name:"Gummy Ghost Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_demon",name:"Gummy Demon Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_king",name:"Gummy King Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_aura",name:"Gummy Aura Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_striker",name:"Gummy Striker Sprite",category:"gummy",rarity:"epic"},
+{id:"gummy_punk",name:"Gummy Punk Sprite",category:"gummy",rarity:"legendary"},
+{id:"gummy_dream",name:"Gummy Dream Sprite",category:"gummy",rarity:"legendary"},
+{id:"gummy_boss",name:"Gummy Boss Sprite",category:"gummy",rarity:"legendary"},
+{id:"gummy_zeropoint",name:"Gummy Zero Point Sprite",category:"gummy",rarity:"mythic"},
+{id:"gummy_grimreaper",name:"Gummy Grim Reaper Sprite",category:"gummy",rarity:"mythic"},
+// --- GALAXY VARIANTS (15) ---
+{id:"galaxy_water",name:"Galaxy Water Sprite",category:"galaxy",rarity:"rare"},
+{id:"galaxy_earth",name:"Galaxy Earth Sprite",category:"galaxy",rarity:"rare"},
+{id:"galaxy_fire",name:"Galaxy Fire Sprite",category:"galaxy",rarity:"rare"},
+{id:"galaxy_fishy",name:"Galaxy Fishy Sprite",category:"galaxy",rarity:"rare"},
+{id:"galaxy_duck",name:"Galaxy Duck Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_ghost",name:"Galaxy Ghost Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_demon",name:"Galaxy Demon Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_king",name:"Galaxy King Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_aura",name:"Galaxy Aura Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_striker",name:"Galaxy Striker Sprite",category:"galaxy",rarity:"epic"},
+{id:"galaxy_punk",name:"Galaxy Punk Sprite",category:"galaxy",rarity:"legendary"},
+{id:"galaxy_dream",name:"Galaxy Dream Sprite",category:"galaxy",rarity:"legendary"},
+{id:"galaxy_boss",name:"Galaxy Boss Sprite",category:"galaxy",rarity:"legendary"},
+{id:"galaxy_zeropoint",name:"Galaxy Zero Point Sprite",category:"galaxy",rarity:"mythic"},
+{id:"galaxy_grimreaper",name:"Galaxy Grim Reaper Sprite",category:"galaxy",rarity:"mythic"},
+// --- HOLOFOIL VARIANTS (5) ---
+{id:"holo_king",name:"Holofoil King Sprite",category:"holofoil",rarity:"epic"},
+{id:"holo_striker",name:"Holofoil Striker Sprite",category:"holofoil",rarity:"epic"},
+{id:"holo_ghost",name:"Holofoil Ghost Sprite",category:"holofoil",rarity:"epic"},
+{id:"holo_water",name:"Holofoil Water Sprite",category:"holofoil",rarity:"rare"},
+{id:"holo_zeropoint",name:"Holofoil Zero Point Sprite",category:"holofoil",rarity:"mythic"},
+];
+
+const PLAYERS = ["rich","liz","mike","tyler"];
+const STORAGE_KEY = "fortnite_sprite_tracker_v2";
+let currentFilter = "all";
+let state = {};
+
+// ===== INIT STATE =====
+function initState(){
+const saved = localStorage.getItem(STORAGE_KEY);
+if(saved){try{state=JSON.parse(saved)}catch(e){state={}}}
+// Ensure all sprites/players exist
+SPRITES.forEach(s=>{PLAYERS.forEach(p=>{
+if(!state[s.id])state[s.id]={};
+if(typeof state[s.id][p]!=="boolean")state[s.id][p]=false;
+});});
+saveState();
+}
+
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+
+// ===== RENDER SPRITE CARDS =====
+function renderSprites(){
+const container=document.getElementById("spriteContainer");
+const categories=[
+{id:"base",name:"Base Sprites",icon:"⭐"},
+{id:"gold",name:"Gold Variants",icon:"🟡"},
+{id:"gummy",name:"Gummy Variants",icon:"🍬"},
+{id:"galaxy",name:"Galaxy Variants",icon:"🌌"},
+{id:"holofoil",name:"Holofoil Variants",icon:"✨"}
+];
+let html="";
+categories.forEach(cat=>{
+const catSprites=SPRITES.filter(s=>s.category===cat.id);
+html+=`<div class="category-header" id="cat-${cat.id}">
+<span class="category-icon">${cat.icon}</span>${cat.name}
+<span class="category-count">${catSprites.length} sprites</span>
+</div><div class="sprite-grid">`;
+catSprites.forEach(s=>{
+const badgeClass="badge-"+s.category;
+html+=`<div class="sprite-card" data-id="${s.id}" data-category="${s.category}" data-rarity="${s.rarity}" data-name="${s.name.toLowerCase()}">
+<div class="sprite-name">${s.name}<span class="sprite-type-badge ${badgeClass}">${s.category}</span></div>
+<div class="checkboxes">`;
+PLAYERS.forEach(p=>{
+const checked=state[s.id]&&state[s.id][p]?"checked":"";
+html+=`<div class="cb-wrapper" data-player="${p}">
+<span class="cb-label">${p}</span>
+<div class="cb-custom ${checked}" data-sprite="${s.id}" data-player="${p}" onclick="toggleCheckbox('${s.id}','${p}')" title="Click to toggle ${p}'s ${s.name}"></div>
+</div>`;
+});
+html+=`</div></div>`;
+});
+html+=`</div>`;
+});
+container.innerHTML=html;
+updateProgress();
+}
+
+// ===== TOGGLE CHECKBOX =====
+function toggleCheckbox(spriteId,player){
+if(!state[spriteId])state[spriteId]={};
+state[spriteId][player]=!state[spriteId][player];
+saveState();
+// Update visual
+const cb=document.querySelector(`.cb-custom[data-sprite="${spriteId}"][data-player="${player}"]`);
+if(state[spriteId][player]){cb.classList.add("checked")}
+else{cb.classList.remove("checked")}
+updateProgress();
+}
+
+// ===== UPDATE PROGRESS BARS =====
+function updateProgress(){
+let counts={rich:0,liz:0,mike:0,tyler:0,total:0};
+SPRITES.forEach(s=>{PLAYERS.forEach(p=>{
+if(state[s.id]&&state[s.id][p]){counts[p]++;counts.total++}
+});});
+const max=SPRITES.length;
+const totalMax=SPRITES.length*PLAYERS.length;
+PLAYERS.forEach(p=>{
+const pct=Math.round((counts[p]/max)*100);
+document.getElementById(p+"Count").textContent=`${counts[p]} / ${max}`;
+document.getElementById(p+"Bar").style.width=pct+"%";
+});
+const teamPct=Math.round((counts.total/totalMax)*100);
+document.getElementById("teamCount").textContent=`${counts.total} / ${totalMax}`;
+document.getElementById("teamBar").style.width=teamPct+"%";
+}
+
+// ===== SEARCH & FILTER =====
+function setFilter(filter){
+currentFilter=filter;
+document.querySelectorAll(".filter-btn").forEach(b=>{
+b.classList.toggle("active",b.dataset.filter===filter);
+});
+filterSprites();
+}
+
+function filterSprites(){
+const searchTerm=document.getElementById("search").value.toLowerCase();
+document.querySelectorAll(".sprite-card").forEach(card=>{
+const name=card.dataset.name;
+const cat=card.dataset.category;
+const matchesSearch=name.includes(searchTerm);
+const matchesFilter=currentFilter==="all"||cat===currentFilter;
+card.classList.toggle("hidden",!(matchesSearch&&matchesFilter));
+});
+// Hide empty category headers
+document.querySelectorAll(".category-header").forEach(h=>{
+const grid=h.nextElementSibling;
+let visible=Array.from(grid.children).filter(c=>!c.classList.contains("hidden")).length;
+h.style.display=visible>0?"":"none";
+grid.style.display=visible>0?"":"none";
+});
+}
+
+// ===== EXPORT / IMPORT =====
+function exportData(){
+const data={exportDate:new Date().toISOString(),version:"2.0",players:PLAYERS,sprites:state};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download="sprite-tracker-export.json";
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+URL.revokeObjectURL(url);
+showToast("✅ Progress exported! Share the file with your team.","success");
+}
+
+function importData(event){
+const file=event.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(e){
+try{
+const data=JSON.parse(e.target.result);
+if(data.sprites){state=data.sprites}
+else if(Object.keys(data).length>0){state=data}
+// Ensure structure
+SPRITES.forEach(s=>{PLAYERS.forEach(p=>{
+if(!state[s.id])state[s.id]={};
+if(typeof state[s.id][p]!=="boolean")state[s.id][p]=false;
+});});
+saveState();
+renderSprites();
+showToast("✅ Progress imported successfully!","success");
+}catch(err){
+showToast("❌ Invalid file format.","error");
+}
+};
+reader.readAsText(file);
+event.target.value="";
+}
+
+function resetData(){
+if(confirm("⚠️ Are you sure you want to reset ALL progress for Rich, Liz, Mike, and Tyler? This cannot be undone.")){
+state={};
+initState();
+renderSprites();
+showToast("✅ All progress reset.","success");
+}
+}
+
+// ===== TOAST NOTIFICATION =====
+function showToast(msg,type){
+const toast=document.getElementById("toast");
+toast.textContent=msg;
+toast.className="toast show"+(type==="error"?" error":"");
+setTimeout(()=>{toast.className="toast"},3000);
+}
+
+// ===== KEYBOARD SHORTCUT: '/' focuses search =====
+document.addEventListener("keydown",e=>{
+if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){
+e.preventDefault();document.getElementById("search").focus();
+}
+});
+
+// ===== INIT =====
+initState();
+renderSprites();
+</script>
+</body>
+</html>

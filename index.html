@@ -111,21 +111,33 @@ background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-c
 -webkit-text-fill-color:transparent}
 .trade-modal .subtitle{text-align:center;color:var(--text-dim);margin-bottom:25px}
 .trade-close{float:right;background:none;border:none;color:var(--text-dim);font-size:1.5em;cursor:pointer}
+.quick-log{background:var(--card-light);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px}
+.quick-log-title{font-weight:700;margin-bottom:12px;color:var(--gold);display:flex;align-items:center;gap:8px}
+.quick-log-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.quick-log-row select{padding:9px 10px;background:var(--card);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:.85em;flex:1;min-width:120px}
+.quick-log-row select:focus{outline:none;border-color:var(--orange)}
+.quick-log-row .arrow{color:var(--text-dim);font-weight:700}
+.ql-btn{padding:9px 20px;border-radius:8px;font-weight:700;font-size:.85em;cursor:pointer;border:2px solid var(--green);background:rgba(6,255,165,.1);color:var(--green);transition:all .2s}
+.ql-btn:hover{background:var(--green);color:#04121a}
+.quick-log-hint{font-size:.78em;color:var(--text-dim);margin-top:10px}
 .trade-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
 .trade-tab{padding:8px 16px;border-radius:8px;font-weight:600;font-size:.85em;cursor:pointer;
 border:2px solid var(--border);background:var(--card-light);color:var(--text-dim)}
 .trade-tab.active{border-color:var(--orange);color:var(--orange);background:rgba(255,133,0,.1)}
+.loop-intro{text-align:center;color:var(--text-dim);font-size:.85em;margin-bottom:18px;line-height:1.5}
 .trade-pair-section{margin-bottom:25px}
 .trade-pair-header{font-size:1.1em;font-weight:700;margin-bottom:12px;padding:10px 15px;
 border-radius:8px;background:var(--card-light);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.trade-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.trade-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-light);
+.trade-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.trade-item{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card-light);
 border-radius:8px;border-left:4px solid var(--border);transition:all .3s}
 .trade-item:hover{transform:translateX(5px)}
 .trade-sprite-name{font-weight:600;font-size:.95em}
-.trade-tag{margin-left:auto;font-size:.75em;font-weight:600;padding:3px 10px;border-radius:10px}
+.trade-tag{margin-left:auto;font-size:.72em;font-weight:600;padding:3px 9px;border-radius:10px;white-space:nowrap}
 .tag-has{background:rgba(6,255,165,.15);color:var(--green)}
 .tag-needs{background:rgba(239,35,60,.15);color:var(--red)}
+.mark-traded{padding:5px 11px;border-radius:8px;font-size:.72em;font-weight:700;cursor:pointer;border:2px solid var(--green);background:rgba(6,255,165,.1);color:var(--green);white-space:nowrap;transition:all .2s}
+.mark-traded:hover{background:var(--green);color:#04121a}
 .no-trades{text-align:center;padding:30px;color:var(--text-dim)}
 .footer{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:.85em;border-top:1px solid var(--border);margin-top:40px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
@@ -139,6 +151,7 @@ header h1{font-size:1.8em}
 .controls-bar{padding:10px}
 .progress-section{grid-template-columns:1fr 1fr}
 .trade-list{grid-template-columns:1fr}
+.quick-log-row select{min-width:0}
 }
 @media(max-width:400px){.progress-section{grid-template-columns:1fr}}
 </style>
@@ -189,7 +202,7 @@ header h1{font-size:1.8em}
 <h3 class="tyler-color">Tyler <span class="count" id="tylerCount">0 / 76</span></h3>
 <div class="progress-bar"><div class="progress-fill tyler-bg" id="tylerBar" style="width:0%"></div></div>
 </div>
-<div class="progress-card">
+<div class="progress-card" id="teamCard" onclick="showTeamView()">
 <h3 class="team-color">Team <span class="count" id="teamCount">0 / 304</span></h3>
 <div class="progress-bar"><div class="progress-fill team-bg" id="teamBar" style="width:0%"></div></div>
 </div>
@@ -199,16 +212,40 @@ header h1{font-size:1.8em}
 <div class="trade-modal">
 <button class="trade-close" onclick="closeTradeCentral()">X</button>
 <h2>Trade Central</h2>
-<p class="subtitle">Who can trade what with whom</p>
+<p class="subtitle">Log trades in a match &mdash; it checks the boxes for you</p>
+<div class="quick-log">
+<div class="quick-log-title">&#9889; Quick log a trade</div>
+<div class="quick-log-row">
+<select id="qlGiver" onchange="updateQuickPickerSprites()">
+<option value="">Giver</option>
+<option value="rich">Rich</option>
+<option value="mike">Mike</option>
+<option value="liz">Liz</option>
+<option value="tyler">Tyler</option>
+</select>
+<span class="arrow">&#8594;</span>
+<select id="qlReceiver" onchange="updateQuickPickerSprites()">
+<option value="">Receiver</option>
+<option value="rich">Rich</option>
+<option value="mike">Mike</option>
+<option value="liz">Liz</option>
+<option value="tyler">Tyler</option>
+</select>
+<select id="qlSprite"><option value="">Sprite</option></select>
+<button class="ql-btn" onclick="logQuickTrade()">Log</button>
+</div>
+<div class="quick-log-hint" id="qlHint">Pick a giver and receiver to see the spares they can pass.</div>
+</div>
 <div class="trade-tabs" id="tradeTabs">
 <button class="trade-tab active" data-trade-mode="all" onclick="setTradeMode('all')">All Trades</button>
 <button class="trade-tab" data-trade-mode="mutual" onclick="setTradeMode('mutual')">Mutual Only</button>
+<button class="trade-tab" data-trade-mode="loop" onclick="setTradeMode('loop')">Trade Loop</button>
 </div>
 <div id="tradeContent"></div>
 </div>
 </div>
 <div class="footer">
-<p>Click a player name to filter their collection. Use Trade Central to coordinate trades.</p>
+<p>Click a player name to filter their collection. Use Trade Central to coordinate and log trades.</p>
 </div>
 <div class="toast" id="toast"></div>
 <script>
@@ -291,6 +328,7 @@ const SPRITES=[
 {id:"holo_grimreaper",name:"Holofoil GrimReaper Sprite",category:"holofoil",rarity:"mythic"}
 ];
 const PLAYERS=["rich","liz","mike","tyler"];
+const LOOP_ORDER=["rich","mike","liz","tyler"];
 const PLAYER_NAMES={rich:"Rich",liz:"Liz",mike:"Mike",tyler:"Tyler"};
 const PLAYER_COLORS={rich:"purple",liz:"pink",mike:"blue",tyler:"orange"};
 const STORAGE_KEY="fortnite_sprite_tracker_v3";
@@ -299,6 +337,9 @@ let activePlayerFilter=null;
 let playerMode="has";
 let tradeMode="all";
 let state={};
+
+function cssVar(player){return getComputedStyle(document.documentElement).getPropertyValue("--"+PLAYER_COLORS[player]);}
+function spriteById(id){for(var i=0;i<SPRITES.length;i++){if(SPRITES[i].id===id)return SPRITES[i];}return null;}
 
 function initState(){
   let saved = null;
@@ -343,13 +384,32 @@ container.innerHTML=html;
 applyFilters();
 }
 
+function setCheckboxUI(spriteId,player){
+const cb=document.querySelector('.cb-custom[data-sprite="'+spriteId+'"][data-player="'+player+'"]');
+if(cb){if(state[spriteId][player]){cb.classList.add("checked")}else{cb.classList.remove("checked")}}
+}
+
 function toggleCheckbox(spriteId,player){
 if(!state[spriteId])state[spriteId]={};
 state[spriteId][player]=!state[spriteId][player];
 saveState();
-const cb=document.querySelector('.cb-custom[data-sprite="'+spriteId+'"][data-player="'+player+'"]');
-if(state[spriteId][player]){cb.classList.add("checked")}else{cb.classList.remove("checked")}
+setCheckboxUI(spriteId,player);
 updateProgress();
+if(document.getElementById("tradeOverlay").classList.contains("show")){renderActiveTradeView();updateQuickPickerSprites();}
+}
+
+/* Logs a trade: the receiver now owns the sprite. The giver keeps their copy (trading duplicates). */
+function logTrade(spriteId,receiver){
+if(!state[spriteId])state[spriteId]={};
+if(state[spriteId][receiver]){showToast(PLAYER_NAMES[receiver]+" already has that one.","error");return;}
+state[spriteId][receiver]=true;
+saveState();
+setCheckboxUI(spriteId,receiver);
+updateProgress();
+const sp=spriteById(spriteId);
+showToast((sp?sp.name:"Sprite")+"  →  "+PLAYER_NAMES[receiver]);
+renderActiveTradeView();
+updateQuickPickerSprites();
 }
 
 function updateProgress(){
@@ -400,6 +460,19 @@ card.classList.toggle("active",card.dataset.player===activePlayerFilter);
 });
 }
 
+function showTeamView(){
+activePlayerFilter=null;
+currentCategoryFilter="all";
+playerMode="has";
+document.getElementById("search").value="";
+document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.toggle("active",b.dataset.filter==="all");});
+updatePlayerTagUI();
+applyFilters();
+var tc=document.getElementById("teamCard");if(tc)tc.classList.add("active");
+var sc=document.querySelector(".sprite-container");if(sc)sc.scrollIntoView({behavior:"smooth",block:"start"});
+showToast("Team view \u2014 showing everyone");
+}
+
 function setCategoryFilter(filter){
 currentCategoryFilter=filter;
 document.querySelectorAll(".filter-btn").forEach(function(b){
@@ -431,10 +504,42 @@ grid.style.display=(visible>0)?"":"none";
 });
 }
 
-function openTradeCentral(){document.getElementById("tradeOverlay").classList.add("show");renderTrades();}
+function openTradeCentral(){document.getElementById("tradeOverlay").classList.add("show");updateQuickPickerSprites();renderActiveTradeView();}
 function closeTradeCentral(){document.getElementById("tradeOverlay").classList.remove("show");}
-function setTradeMode(mode){tradeMode=mode;document.querySelectorAll(".trade-tab").forEach(function(t){t.classList.toggle("active",t.dataset.tradeMode===mode);});renderTrades();}
+function setTradeMode(mode){tradeMode=mode;document.querySelectorAll(".trade-tab").forEach(function(t){t.classList.toggle("active",t.dataset.tradeMode===mode);});renderActiveTradeView();}
+function renderActiveTradeView(){if(tradeMode==="loop"){renderLoop();}else{renderTrades();}}
 
+/* ---- Quick log picker ---- */
+function updateQuickPickerSprites(){
+const g=document.getElementById("qlGiver").value;
+const r=document.getElementById("qlReceiver").value;
+const sel=document.getElementById("qlSprite");
+const hint=document.getElementById("qlHint");
+const prev=sel.value;
+sel.innerHTML='<option value="">Sprite</option>';
+if(!g||!r){hint.textContent="Pick a giver and receiver to see the spares they can pass.";return;}
+if(g===r){hint.textContent="Giver and receiver must be different people.";return;}
+const opts=SPRITES.filter(function(s){return state[s.id]&&state[s.id][g]&&!state[s.id][r];});
+if(opts.length===0){hint.textContent=PLAYER_NAMES[g]+" has nothing "+PLAYER_NAMES[r]+" still needs.";return;}
+opts.forEach(function(s){
+const o=document.createElement("option");o.value=s.id;o.textContent=s.name;
+if(s.id===prev)o.selected=true;
+sel.appendChild(o);
+});
+hint.textContent=opts.length+" sprite"+(opts.length===1?"":"s")+" "+PLAYER_NAMES[g]+" can pass to "+PLAYER_NAMES[r]+".";
+}
+
+function logQuickTrade(){
+const g=document.getElementById("qlGiver").value;
+const r=document.getElementById("qlReceiver").value;
+const sp=document.getElementById("qlSprite").value;
+if(!g||!r){showToast("Pick a giver and a receiver.","error");return;}
+if(g===r){showToast("Pick two different people.","error");return;}
+if(!sp){showToast("Pick a sprite to trade.","error");return;}
+logTrade(sp,r);
+}
+
+/* ---- Pairwise trades ---- */
 function renderTrades(){
 const content=document.getElementById("tradeContent");
 const pairs=[];
@@ -455,18 +560,47 @@ return (y.aGives.length+y.bGives.length)-(x.aGives.length+x.bGives.length);
 });
 var filteredPairs=pairs;
 if(tradeMode==="mutual"){filteredPairs=pairs.filter(function(p){return p.isMutual;});}
-if(filteredPairs.length===0){content.innerHTML="<div class=\"no-trades\">No trade opportunities found!</div>";return}
+if(filteredPairs.length===0){content.innerHTML="<div class=\"no-trades\">No trade opportunities right now!</div>";return}
 var html="";
 filteredPairs.forEach(function(pair){
 html+='<div class="trade-pair-section"><div class="trade-pair-header"><span class="'+pair.a+'-color">'+PLAYER_NAMES[pair.a]+'</span><span>&#8596;</span><span class="'+pair.b+'-color">'+PLAYER_NAMES[pair.b]+'</span><span style="margin-left:auto;font-size:.8em;color:var(--text-dim)">'+(pair.aGives.length+pair.bGives.length)+' swaps</span></div><div class="trade-list">';
 pair.aGives.forEach(function(s){
-html+='<div class="trade-item" style="border-left-color:'+getComputedStyle(document.documentElement).getPropertyValue("--"+PLAYER_COLORS[pair.a])+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[pair.a]+' -> '+PLAYER_NAMES[pair.b]+'</span></div>';
+html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.a)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[pair.a]+' &#8594; '+PLAYER_NAMES[pair.b]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+pair.b+'\')">Mark traded</button></div>';
 });
 pair.bGives.forEach(function(s){
-html+='<div class="trade-item" style="border-left-color:'+getComputedStyle(document.documentElement).getPropertyValue("--"+PLAYER_COLORS[pair.b])+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-needs">'+PLAYER_NAMES[pair.b]+' -> '+PLAYER_NAMES[pair.a]+'</span></div>';
+html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.b)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-needs">'+PLAYER_NAMES[pair.b]+' &#8594; '+PLAYER_NAMES[pair.a]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+pair.a+'\')">Mark traded</button></div>';
 });
 html+="</div></div>";
 });
+content.innerHTML=html;
+}
+
+/* ---- Trade loop: Rich -> Mike -> Liz -> Tyler -> Rich ---- */
+function renderLoop(){
+const content=document.getElementById("tradeContent");
+var order=LOOP_ORDER.map(function(p){return PLAYER_NAMES[p];}).join(" → ");
+var html='<div class="loop-intro">Pass spares around the ring: <strong>'+order+' → '+PLAYER_NAMES[LOOP_ORDER[0]]+'</strong>.<br>Each person gives the next a sprite they own that the next still needs. Everyone keeps their own copies.</div>';
+var anything=false;
+for(var i=0;i<LOOP_ORDER.length;i++){
+var giver=LOOP_ORDER[i];
+var receiver=LOOP_ORDER[(i+1)%LOOP_ORDER.length];
+var gives=SPRITES.filter(function(s){return state[s.id]&&state[s.id][giver]&&!state[s.id][receiver];});
+html+='<div class="trade-pair-section"><div class="trade-pair-header"><span class="'+giver+'-color">'+PLAYER_NAMES[giver]+'</span><span>&#8594;</span><span class="'+receiver+'-color">'+PLAYER_NAMES[receiver]+'</span><span style="margin-left:auto;font-size:.8em;color:var(--text-dim)">'+gives.length+' to give</span></div>';
+if(gives.length===0){
+html+='<div class="no-trades" style="padding:12px">Nothing to pass right now.</div>';
+}else{
+anything=true;
+html+='<div class="trade-list">';
+(function(giver,receiver,gives){
+gives.forEach(function(s){
+html+='<div class="trade-item" style="border-left-color:'+cssVar(giver)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[giver]+' &#8594; '+PLAYER_NAMES[receiver]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+receiver+'\')">Mark traded</button></div>';
+});
+})(giver,receiver,gives);
+html+='</div>';
+}
+html+='</div>';
+}
+if(!anything){html='<div class="no-trades">Everyone in the ring already has what the next person could give. Nice!</div>';}
 content.innerHTML=html;
 }
 

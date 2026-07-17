@@ -83,6 +83,11 @@ border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
 .sprite-card[data-category="holofoil"]::before{background:linear-gradient(90deg,#ff006e,#9d4edd,#00f5ff)}
 .sprite-name{font-size:1em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .sprite-type-badge{font-size:.65em;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase}
+.rarity-badge{font-size:.6em;padding:2px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.rarity-rare{background:rgba(0,245,255,.15);color:var(--blue)}
+.rarity-epic{background:rgba(157,78,221,.18);color:var(--purple)}
+.rarity-legendary{background:rgba(255,213,10,.15);color:var(--gold)}
+.rarity-mythic{background:rgba(255,133,0,.18);color:var(--orange)}
 .badge-base{background:rgba(157,78,221,.2);color:var(--purple)}
 .badge-gold{background:rgba(255,215,0,.2);color:var(--gold)}
 .badge-gummy{background:rgba(255,0,110,.2);color:var(--pink)}
@@ -105,13 +110,13 @@ backdrop-filter:blur(5px);z-index:1000;display:none;justify-content:center;align
 padding:40px 20px;overflow-y:auto}
 .trade-overlay.show{display:flex}
 .trade-modal{background:var(--card);border:2px solid var(--orange);border-radius:16px;
-max-width:900px;width:100%;padding:30px;box-shadow:0 0 50px rgba(255,133,0,.3)}
+max-width:960px;width:100%;padding:30px;box-shadow:0 0 50px rgba(255,133,0,.3)}
 .trade-modal h2{font-size:1.8em;text-align:center;margin-bottom:5px;
 background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;
 -webkit-text-fill-color:transparent}
 .trade-modal .subtitle{text-align:center;color:var(--text-dim);margin-bottom:25px}
 .trade-close{float:right;background:none;border:none;color:var(--text-dim);font-size:1.5em;cursor:pointer}
-.quick-log{background:var(--card-light);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px}
+.quick-log{background:var(--card-light);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
 .quick-log-title{font-weight:700;margin-bottom:12px;color:var(--gold);display:flex;align-items:center;gap:8px}
 .quick-log-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .quick-log-row select{padding:9px 10px;background:var(--card);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:.85em;flex:1;min-width:120px}
@@ -120,6 +125,33 @@ background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-c
 .ql-btn{padding:9px 20px;border-radius:8px;font-weight:700;font-size:.85em;cursor:pointer;border:2px solid var(--green);background:rgba(6,255,165,.1);color:var(--green);transition:all .2s}
 .ql-btn:hover{background:var(--green);color:#04121a}
 .quick-log-hint{font-size:.78em;color:var(--text-dim);margin-top:10px}
+.playing-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;padding:12px;background:var(--card-light);border:1px solid var(--border);border-radius:12px}
+.playing-label{font-weight:700;font-size:.85em;color:var(--text-dim);margin-right:4px}
+.play-chip{padding:6px 14px;border-radius:16px;font-weight:700;font-size:.82em;cursor:pointer;border:2px solid var(--border);background:var(--card);color:var(--text-dim);opacity:.5;transition:all .2s}
+.play-chip:hover{opacity:.85}
+.play-chip.active{opacity:1}
+.play-chip.rich.active{border-color:var(--purple);color:var(--purple);background:rgba(157,78,221,.12)}
+.play-chip.liz.active{border-color:var(--pink);color:var(--pink);background:rgba(255,0,110,.12)}
+.play-chip.mike.active{border-color:var(--blue);color:var(--blue);background:rgba(0,245,255,.12)}
+.play-chip.tyler.active{border-color:var(--orange);color:var(--orange);background:rgba(255,133,0,.12)}
+.trade-body{display:flex;gap:18px;align-items:flex-start}
+.trade-main{flex:1;min-width:0}
+.pending-panel{width:270px;flex-shrink:0;background:var(--card-light);border:1px solid var(--border);border-radius:12px;padding:14px;position:sticky;top:0}
+.pending-header{font-weight:700;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.pending-header .pcount{background:rgba(6,255,165,.15);border-radius:10px;padding:1px 8px;font-size:.8em}
+.pending-empty{font-size:.8em;color:var(--text-dim);line-height:1.5}
+.pending-item{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:8px;border-left:4px solid var(--border);padding:8px 10px;margin-bottom:8px}
+.pending-info{flex:1;min-width:0}
+.pending-route{display:block;font-size:.78em;font-weight:700}
+.pending-sprite{display:block;font-size:.82em;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pending-btns{display:flex;gap:4px}
+.pending-confirm,.pending-remove{border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:.85em;font-weight:700;transition:all .2s}
+.pending-confirm{background:rgba(6,255,165,.15);color:var(--green)}
+.pending-confirm:hover{background:var(--green);color:#04121a}
+.pending-remove{background:rgba(239,35,60,.12);color:var(--red)}
+.pending-remove:hover{background:var(--red);color:#fff}
+.complete-all{width:100%;margin-top:6px;padding:10px;border-radius:8px;font-weight:700;font-size:.85em;cursor:pointer;border:2px solid var(--green);background:rgba(6,255,165,.1);color:var(--green);transition:all .2s}
+.complete-all:hover{background:var(--green);color:#04121a}
 .trade-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
 .trade-tab{padding:8px 16px;border-radius:8px;font-weight:600;font-size:.85em;cursor:pointer;
 border:2px solid var(--border);background:var(--card-light);color:var(--text-dim)}
@@ -136,8 +168,10 @@ border-radius:8px;border-left:4px solid var(--border);transition:all .3s}
 .trade-tag{margin-left:auto;font-size:.72em;font-weight:600;padding:3px 9px;border-radius:10px;white-space:nowrap}
 .tag-has{background:rgba(6,255,165,.15);color:var(--green)}
 .tag-needs{background:rgba(239,35,60,.15);color:var(--red)}
-.mark-traded{padding:5px 11px;border-radius:8px;font-size:.72em;font-weight:700;cursor:pointer;border:2px solid var(--green);background:rgba(6,255,165,.1);color:var(--green);white-space:nowrap;transition:all .2s}
-.mark-traded:hover{background:var(--green);color:#04121a}
+.mark-traded{padding:5px 11px;border-radius:8px;font-size:.72em;font-weight:700;cursor:pointer;border:2px solid var(--orange);background:rgba(255,133,0,.1);color:var(--orange);white-space:nowrap;transition:all .2s}
+.mark-traded:hover{background:var(--orange);color:#04121a}
+.mark-traded.staged{border-color:var(--text-dim);background:transparent;color:var(--text-dim);cursor:default}
+.mark-traded.staged:hover{background:transparent;color:var(--text-dim)}
 .no-trades{text-align:center;padding:30px;color:var(--text-dim)}
 .footer{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:.85em;border-top:1px solid var(--border);margin-top:40px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
@@ -145,6 +179,10 @@ background:var(--card);border:2px solid var(--green);color:var(--green);padding:
 border-radius:8px;font-weight:600;z-index:9999;transition:transform .4s}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.error{border-color:var(--red);color:var(--red)}
+@media(max-width:700px){
+.trade-body{flex-direction:column}
+.pending-panel{width:100%;position:static}
+}
 @media(max-width:600px){
 header h1{font-size:1.8em}
 .sprite-grid{grid-template-columns:1fr}
@@ -187,23 +225,23 @@ header h1{font-size:1.8em}
 </div>
 <div class="progress-section">
 <div class="progress-card" data-player="rich" onclick="togglePlayerFilter('rich')">
-<h3 class="rich-color">Rich <span class="count" id="richCount">0 / 76</span></h3>
+<h3 class="rich-color">Rich <span class="count" id="richCount">0 / 81</span></h3>
 <div class="progress-bar"><div class="progress-fill rich-bg" id="richBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="liz" onclick="togglePlayerFilter('liz')">
-<h3 class="liz-color">Liz <span class="count" id="lizCount">0 / 76</span></h3>
+<h3 class="liz-color">Liz <span class="count" id="lizCount">0 / 81</span></h3>
 <div class="progress-bar"><div class="progress-fill liz-bg" id="lizBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="mike" onclick="togglePlayerFilter('mike')">
-<h3 class="mike-color">Mike <span class="count" id="mikeCount">0 / 76</span></h3>
+<h3 class="mike-color">Mike <span class="count" id="mikeCount">0 / 81</span></h3>
 <div class="progress-bar"><div class="progress-fill mike-bg" id="mikeBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="tyler" onclick="togglePlayerFilter('tyler')">
-<h3 class="tyler-color">Tyler <span class="count" id="tylerCount">0 / 76</span></h3>
+<h3 class="tyler-color">Tyler <span class="count" id="tylerCount">0 / 81</span></h3>
 <div class="progress-bar"><div class="progress-fill tyler-bg" id="tylerBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" id="teamCard" onclick="showTeamView()">
-<h3 class="team-color">Team <span class="count" id="teamCount">0 / 304</span></h3>
+<h3 class="team-color">Team <span class="count" id="teamCount">0 / 324</span></h3>
 <div class="progress-bar"><div class="progress-fill team-bg" id="teamBar" style="width:0%"></div></div>
 </div>
 </div>
@@ -212,7 +250,7 @@ header h1{font-size:1.8em}
 <div class="trade-modal">
 <button class="trade-close" onclick="closeTradeCentral()">X</button>
 <h2>Trade Central</h2>
-<p class="subtitle">Log trades in a match &mdash; it checks the boxes for you</p>
+<p class="subtitle">Stage trades, then confirm them once they're done in-game</p>
 <div class="quick-log">
 <div class="quick-log-title">&#9889; Quick log a trade</div>
 <div class="quick-log-row">
@@ -232,10 +270,19 @@ header h1{font-size:1.8em}
 <option value="tyler">Tyler</option>
 </select>
 <select id="qlSprite"><option value="">Sprite</option></select>
-<button class="ql-btn" onclick="logQuickTrade()">Log</button>
+<button class="ql-btn" onclick="logQuickTrade()">Log now</button>
 </div>
-<div class="quick-log-hint" id="qlHint">Pick a giver and receiver to see the spares they can pass.</div>
+<div class="quick-log-hint" id="qlHint">Pick a giver and receiver to see the spares they can pass. "Log now" checks the box immediately.</div>
 </div>
+<div class="playing-row" id="playingRow">
+<span class="playing-label">Who's playing?</span>
+<button class="play-chip rich active" data-player="rich" onclick="togglePlaying('rich')">Rich</button>
+<button class="play-chip mike active" data-player="mike" onclick="togglePlaying('mike')">Mike</button>
+<button class="play-chip liz active" data-player="liz" onclick="togglePlaying('liz')">Liz</button>
+<button class="play-chip tyler active" data-player="tyler" onclick="togglePlaying('tyler')">Tyler</button>
+</div>
+<div class="trade-body">
+<div class="trade-main">
 <div class="trade-tabs" id="tradeTabs">
 <button class="trade-tab active" data-trade-mode="all" onclick="setTradeMode('all')">All Trades</button>
 <button class="trade-tab" data-trade-mode="mutual" onclick="setTradeMode('mutual')">Mutual Only</button>
@@ -243,9 +290,16 @@ header h1{font-size:1.8em}
 </div>
 <div id="tradeContent"></div>
 </div>
+<div class="pending-panel">
+<div class="pending-header">Pending Trades <span class="pcount" id="pendingCount">0</span></div>
+<div id="pendingList"></div>
+<button class="complete-all" id="completeAllBtn" onclick="completeAllPending()" style="display:none">Complete all</button>
+</div>
+</div>
+</div>
 </div>
 <div class="footer">
-<p>Click a player name to filter their collection. Use Trade Central to coordinate and log trades.</p>
+<p>Click a player name to see their collection grouped by sprite family. Use Trade Central to stage, confirm, and log trades.</p>
 </div>
 <div class="toast" id="toast"></div>
 <script>
@@ -266,6 +320,11 @@ const SPRITES=[
 {id:"zeropoint",name:"Zero Point Sprite",category:"base",rarity:"mythic"},
 {id:"burntpeanut",name:"BurntPeanut Sprite",category:"base",rarity:"mythic"},
 {id:"grimreaper",name:"GrimReaper Sprite",category:"base",rarity:"mythic"},
+{id:"batman",name:"Batman Sprite",category:"base",rarity:"mythic"},
+{id:"air",name:"Air Sprite",category:"base",rarity:"epic"},
+{id:"seven",name:"Seven Sprite",category:"base",rarity:"epic"},
+{id:"vinijr",name:"Vini Jr. Sprite",category:"base",rarity:"mythic"},
+{id:"pollo",name:"Pollo Sprite",category:"base",rarity:"mythic"},
 {id:"gold_water",name:"Gold Water Sprite",category:"gold",rarity:"rare"},
 {id:"gold_earth",name:"Gold Earth Sprite",category:"gold",rarity:"rare"},
 {id:"gold_fire",name:"Gold Fire Sprite",category:"gold",rarity:"rare"},
@@ -331,15 +390,22 @@ const PLAYERS=["rich","liz","mike","tyler"];
 const LOOP_ORDER=["rich","mike","liz","tyler"];
 const PLAYER_NAMES={rich:"Rich",liz:"Liz",mike:"Mike",tyler:"Tyler"};
 const PLAYER_COLORS={rich:"purple",liz:"pink",mike:"blue",tyler:"orange"};
+const RARITY_RANK={rare:0,epic:1,legendary:2,mythic:3};
+const THEME_ORDER={base:0,gold:1,gummy:2,galaxy:3,holofoil:4};
 const STORAGE_KEY="fortnite_sprite_tracker_v3";
+const PENDING_KEY="fortnite_sprite_tracker_pending_v1";
 let currentCategoryFilter="all";
 let activePlayerFilter=null;
 let playerMode="has";
 let tradeMode="all";
 let state={};
+let pending=[];
+let activePlayers=["rich","liz","mike","tyler"];
 
 function cssVar(player){return getComputedStyle(document.documentElement).getPropertyValue("--"+PLAYER_COLORS[player]);}
 function spriteById(id){for(var i=0;i<SPRITES.length;i++){if(SPRITES[i].id===id)return SPRITES[i];}return null;}
+function activeList(order){return order.filter(function(p){return activePlayers.indexOf(p)>-1;});}
+function familyKey(s){return s.category==="base"?s.id:s.id.substring(s.id.indexOf("_")+1);}
 
 function initState(){
   let saved = null;
@@ -356,6 +422,29 @@ function initState(){
 
 function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){}}
 
+function loadPending(){
+  try{var p=localStorage.getItem(PENDING_KEY);if(p){pending=JSON.parse(p)||[];}}catch(e){pending=[];}
+  if(!Array.isArray(pending))pending=[];
+  pending=pending.filter(function(t){return t&&t.spriteId&&t.receiver&&t.giver&&spriteById(t.spriteId)&&PLAYER_NAMES[t.receiver]&&PLAYER_NAMES[t.giver];});
+}
+function savePending(){try{localStorage.setItem(PENDING_KEY,JSON.stringify(pending))}catch(e){}}
+
+/* Builds a single sprite card. Shared by both layouts. */
+function cardHtml(s){
+var badgeClass="badge-"+s.category;
+var h='<div class="sprite-card" data-id="'+s.id+'" data-category="'+s.category+'" data-rarity="'+s.rarity+'" data-name="'+s.name.toLowerCase()+'"><div class="sprite-name">'+s.name+'<span class="sprite-type-badge '+badgeClass+'">'+s.category+'</span><span class="rarity-badge rarity-'+s.rarity+'">'+s.rarity+'</span></div><div class="checkboxes">';
+PLAYERS.forEach(function(p){
+var checked=(state[s.id]&&state[s.id][p])?"checked":"";
+h+='<div class="cb-wrapper" data-player="'+p+'"><span class="cb-label">'+p+'</span><div class="cb-custom '+checked+'" data-sprite="'+s.id+'" data-player="'+p+'" onclick="toggleCheckbox(\''+s.id+'\',\''+p+'\')" title="'+PLAYER_NAMES[p]+' - '+s.name+'"></div></div>';
+});
+h+='</div></div>';
+return h;
+}
+
+/* Chooses the layout: family grouping when a player is selected, category grouping otherwise. */
+function renderGrid(){if(activePlayerFilter){renderFamilyLayout();}else{renderSprites();}}
+
+/* Default layout: grouped by category (Base, Gold, ...), each sorted low->high rarity. */
 function renderSprites(){
 const container=document.getElementById("spriteContainer");
 const categories=[
@@ -367,17 +456,26 @@ const categories=[
 ];
 let html="";
 categories.forEach(function(cat){
-const catSprites=SPRITES.filter(function(s){return s.category===cat.id;});
+const catSprites=SPRITES.filter(function(s){return s.category===cat.id;}).sort(function(a,b){return (RARITY_RANK[a.rarity]||0)-(RARITY_RANK[b.rarity]||0);});
 html+='<div class="category-header" id="cat-'+cat.id+'"><span>'+cat.name+'</span><span class="category-count">'+catSprites.length+' sprites</span></div><div class="sprite-grid">';
-catSprites.forEach(function(s){
-const badgeClass="badge-"+s.category;
-html+='<div class="sprite-card" data-id="'+s.id+'" data-category="'+s.category+'" data-rarity="'+s.rarity+'" data-name="'+s.name.toLowerCase()+'"><div class="sprite-name">'+s.name+'<span class="sprite-type-badge '+badgeClass+'">'+s.category+'</span></div><div class="checkboxes">';
-PLAYERS.forEach(function(p){
-const checked=(state[s.id]&&state[s.id][p])?"checked":"";
-html+='<div class="cb-wrapper" data-player="'+p+'"><span class="cb-label">'+p+'</span><div class="cb-custom '+checked+'" data-sprite="'+s.id+'" data-player="'+p+'" onclick="toggleCheckbox(\''+s.id+'\',\''+p+'\')" title="'+PLAYER_NAMES[p]+' - '+s.name+'"></div></div>';
+catSprites.forEach(function(s){html+=cardHtml(s);});
+html+='</div>';
 });
-html+='</div></div>';
-});
+container.innerHTML=html;
+applyFilters();
+}
+
+/* Player layout: grouped by sprite family (all versions of one creature together),
+   families ordered low->high rarity, versions ordered base -> gold -> gummy -> galaxy -> holofoil. */
+function renderFamilyLayout(){
+const container=document.getElementById("spriteContainer");
+const bases=SPRITES.filter(function(s){return s.category==="base";}).sort(function(a,b){return (RARITY_RANK[a.rarity]||0)-(RARITY_RANK[b.rarity]||0);});
+let html="";
+bases.forEach(function(base){
+var members=SPRITES.filter(function(s){return familyKey(s)===base.id;}).sort(function(a,b){return (THEME_ORDER[a.category]||0)-(THEME_ORDER[b.category]||0);});
+var famName=base.name.replace(/ Sprite$/,"");
+html+='<div class="category-header"><span>'+famName+'</span><span class="category-count">'+members.length+(members.length===1?' version':' versions')+'</span></div><div class="sprite-grid">';
+members.forEach(function(s){html+=cardHtml(s);});
 html+='</div>';
 });
 container.innerHTML=html;
@@ -398,18 +496,83 @@ updateProgress();
 if(document.getElementById("tradeOverlay").classList.contains("show")){renderActiveTradeView();updateQuickPickerSprites();}
 }
 
-/* Logs a trade: the receiver now owns the sprite. The giver keeps their copy (trading duplicates). */
-function logTrade(spriteId,receiver){
+/* Marks the receiver as owning the sprite. The giver keeps their copy. Returns true if it changed. */
+function commitTrade(spriteId,receiver){
 if(!state[spriteId])state[spriteId]={};
-if(state[spriteId][receiver]){showToast(PLAYER_NAMES[receiver]+" already has that one.","error");return;}
+if(state[spriteId][receiver])return false;
 state[spriteId][receiver]=true;
-saveState();
 setCheckboxUI(spriteId,receiver);
-updateProgress();
+return true;
+}
+
+/* Immediate log (used by the quick picker). */
+function logTrade(spriteId,receiver){
+if(state[spriteId]&&state[spriteId][receiver]){showToast(PLAYER_NAMES[receiver]+" already has that one.","error");return;}
+commitTrade(spriteId,receiver);
+saveState();updateProgress();
 const sp=spriteById(spriteId);
 showToast((sp?sp.name:"Sprite")+"  →  "+PLAYER_NAMES[receiver]);
-renderActiveTradeView();
-updateQuickPickerSprites();
+renderActiveTradeView();updateQuickPickerSprites();
+}
+
+/* ---- Staging / pending trades ---- */
+function isStaged(spriteId,receiver){for(var i=0;i<pending.length;i++){if(pending[i].spriteId===spriteId&&pending[i].receiver===receiver)return true;}return false;}
+
+function stageTrade(spriteId,receiver,giver){
+if(state[spriteId]&&state[spriteId][receiver]){showToast(PLAYER_NAMES[receiver]+" already has that one.","error");return;}
+if(isStaged(spriteId,receiver)){showToast("Already staged.","error");return;}
+pending.push({spriteId:spriteId,receiver:receiver,giver:giver});
+savePending();
+const sp=spriteById(spriteId);
+showToast("Staged: "+(sp?sp.name:spriteId)+" → "+PLAYER_NAMES[receiver]);
+renderPending();renderActiveTradeView();
+}
+
+function renderPending(){
+const list=document.getElementById("pendingList");
+const cnt=document.getElementById("pendingCount");
+const allBtn=document.getElementById("completeAllBtn");
+if(!list)return;
+cnt.textContent=pending.length;
+if(pending.length===0){
+list.innerHTML='<div class="pending-empty">No pending trades yet. Click <strong>Stage</strong> on a trade to add it here, then confirm it once it\'s done in-game.</div>';
+allBtn.style.display="none";
+return;
+}
+allBtn.style.display="block";
+var html="";
+pending.forEach(function(t,i){
+var sp=spriteById(t.spriteId);
+html+='<div class="pending-item" style="border-left-color:'+cssVar(t.giver)+'"><div class="pending-info"><span class="pending-route"><span class="'+t.giver+'-color">'+PLAYER_NAMES[t.giver]+'</span> &#8594; <span class="'+t.receiver+'-color">'+PLAYER_NAMES[t.receiver]+'</span></span><span class="pending-sprite">'+(sp?sp.name:t.spriteId)+'</span></div><div class="pending-btns"><button class="pending-confirm" title="Confirm this trade" onclick="confirmPending('+i+')">&#10003;</button><button class="pending-remove" title="Remove / reverse" onclick="removePending('+i+')">&#10005;</button></div></div>';
+});
+list.innerHTML=html;
+}
+
+function confirmPending(i){
+var t=pending[i];if(!t)return;
+var changed=commitTrade(t.spriteId,t.receiver);
+pending.splice(i,1);savePending();
+saveState();updateProgress();
+var sp=spriteById(t.spriteId);
+showToast((sp?sp.name:"Sprite")+" → "+PLAYER_NAMES[t.receiver]+(changed?" confirmed":" (already had it)"));
+renderPending();renderActiveTradeView();updateQuickPickerSprites();
+}
+
+function removePending(i){
+if(!pending[i])return;
+pending.splice(i,1);savePending();
+renderPending();renderActiveTradeView();
+showToast("Removed from pending");
+}
+
+function completeAllPending(){
+if(pending.length===0)return;
+var n=0;
+pending.forEach(function(t){if(commitTrade(t.spriteId,t.receiver))n++;});
+pending=[];savePending();
+saveState();updateProgress();
+showToast(n+" trade"+(n===1?"":"s")+" completed");
+renderPending();renderActiveTradeView();updateQuickPickerSprites();
 }
 
 function updateProgress(){
@@ -435,7 +598,7 @@ function togglePlayerFilter(player){
 if(activePlayerFilter===player){activePlayerFilter=null;}
 else{activePlayerFilter=player;playerMode="has";}
 updatePlayerTagUI();
-applyFilters();
+renderGrid();
 }
 
 function setPlayerMode(mode){playerMode=mode;updatePlayerTagUI();applyFilters();}
@@ -467,10 +630,10 @@ playerMode="has";
 document.getElementById("search").value="";
 document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.toggle("active",b.dataset.filter==="all");});
 updatePlayerTagUI();
-applyFilters();
+renderGrid();
 var tc=document.getElementById("teamCard");if(tc)tc.classList.add("active");
 var sc=document.querySelector(".sprite-container");if(sc)sc.scrollIntoView({behavior:"smooth",block:"start"});
-showToast("Team view \u2014 showing everyone");
+showToast("Team view — showing everyone");
 }
 
 function setCategoryFilter(filter){
@@ -504,10 +667,21 @@ grid.style.display=(visible>0)?"":"none";
 });
 }
 
-function openTradeCentral(){document.getElementById("tradeOverlay").classList.add("show");updateQuickPickerSprites();renderActiveTradeView();}
+function openTradeCentral(){document.getElementById("tradeOverlay").classList.add("show");renderActivePlayersUI();updateQuickPickerSprites();renderPending();renderActiveTradeView();}
 function closeTradeCentral(){document.getElementById("tradeOverlay").classList.remove("show");}
 function setTradeMode(mode){tradeMode=mode;document.querySelectorAll(".trade-tab").forEach(function(t){t.classList.toggle("active",t.dataset.tradeMode===mode);});renderActiveTradeView();}
 function renderActiveTradeView(){if(tradeMode==="loop"){renderLoop();}else{renderTrades();}}
+
+/* ---- Who's playing ---- */
+function togglePlaying(p){
+var i=activePlayers.indexOf(p);
+if(i>-1){activePlayers.splice(i,1);}else{activePlayers.push(p);}
+renderActivePlayersUI();
+renderActiveTradeView();
+}
+function renderActivePlayersUI(){
+document.querySelectorAll(".play-chip").forEach(function(c){c.classList.toggle("active",activePlayers.indexOf(c.dataset.player)>-1);});
+}
 
 /* ---- Quick log picker ---- */
 function updateQuickPickerSprites(){
@@ -540,12 +714,19 @@ logTrade(sp,r);
 }
 
 /* ---- Pairwise trades ---- */
+function tradeBtn(spriteId,receiver,giver){
+if(isStaged(spriteId,receiver))return '<button class="mark-traded staged" disabled>Staged</button>';
+return '<button class="mark-traded" onclick="stageTrade(\''+spriteId+'\',\''+receiver+'\',\''+giver+'\')">Stage</button>';
+}
+
 function renderTrades(){
 const content=document.getElementById("tradeContent");
+const act=activeList(PLAYERS);
+if(act.length<2){content.innerHTML='<div class="no-trades">Pick at least two players in "Who\'s playing?" above to see trades.</div>';return;}
 const pairs=[];
-for(var i=0;i<PLAYERS.length;i++){
-for(var j=i+1;j<PLAYERS.length;j++){
-var a=PLAYERS[i],b=PLAYERS[j];
+for(var i=0;i<act.length;i++){
+for(var j=i+1;j<act.length;j++){
+var a=act[i],b=act[j];
 var aGives=SPRITES.filter(function(s){return state[s.id]&&state[s.id][a]&&!state[s.id][b];});
 var bGives=SPRITES.filter(function(s){return state[s.id]&&state[s.id][b]&&!state[s.id][a];});
 if((aGives.length===0)&&(bGives.length===0))continue;
@@ -565,25 +746,27 @@ var html="";
 filteredPairs.forEach(function(pair){
 html+='<div class="trade-pair-section"><div class="trade-pair-header"><span class="'+pair.a+'-color">'+PLAYER_NAMES[pair.a]+'</span><span>&#8596;</span><span class="'+pair.b+'-color">'+PLAYER_NAMES[pair.b]+'</span><span style="margin-left:auto;font-size:.8em;color:var(--text-dim)">'+(pair.aGives.length+pair.bGives.length)+' swaps</span></div><div class="trade-list">';
 pair.aGives.forEach(function(s){
-html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.a)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[pair.a]+' &#8594; '+PLAYER_NAMES[pair.b]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+pair.b+'\')">Mark traded</button></div>';
+html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.a)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[pair.a]+' &#8594; '+PLAYER_NAMES[pair.b]+'</span>'+tradeBtn(s.id,pair.b,pair.a)+'</div>';
 });
 pair.bGives.forEach(function(s){
-html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.b)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-needs">'+PLAYER_NAMES[pair.b]+' &#8594; '+PLAYER_NAMES[pair.a]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+pair.a+'\')">Mark traded</button></div>';
+html+='<div class="trade-item" style="border-left-color:'+cssVar(pair.b)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-needs">'+PLAYER_NAMES[pair.b]+' &#8594; '+PLAYER_NAMES[pair.a]+'</span>'+tradeBtn(s.id,pair.a,pair.b)+'</div>';
 });
 html+="</div></div>";
 });
 content.innerHTML=html;
 }
 
-/* ---- Trade loop: Rich -> Mike -> Liz -> Tyler -> Rich ---- */
+/* ---- Trade loop: chains only the players who are marked as playing ---- */
 function renderLoop(){
 const content=document.getElementById("tradeContent");
-var order=LOOP_ORDER.map(function(p){return PLAYER_NAMES[p];}).join(" → ");
-var html='<div class="loop-intro">Pass spares around the ring: <strong>'+order+' → '+PLAYER_NAMES[LOOP_ORDER[0]]+'</strong>.<br>Each person gives the next a sprite they own that the next still needs. Everyone keeps their own copies.</div>';
+var ring=activeList(LOOP_ORDER);
+if(ring.length<2){content.innerHTML='<div class="no-trades">Pick at least two players in "Who\'s playing?" above to build a loop.</div>';return;}
+var order=ring.map(function(p){return PLAYER_NAMES[p];}).join(" → ");
+var html='<div class="loop-intro">Pass spares around the ring: <strong>'+order+' → '+PLAYER_NAMES[ring[0]]+'</strong>.<br>Each person gives the next a sprite they own that the next still needs. Everyone keeps their own copies.</div>';
 var anything=false;
-for(var i=0;i<LOOP_ORDER.length;i++){
-var giver=LOOP_ORDER[i];
-var receiver=LOOP_ORDER[(i+1)%LOOP_ORDER.length];
+for(var i=0;i<ring.length;i++){
+var giver=ring[i];
+var receiver=ring[(i+1)%ring.length];
 var gives=SPRITES.filter(function(s){return state[s.id]&&state[s.id][giver]&&!state[s.id][receiver];});
 html+='<div class="trade-pair-section"><div class="trade-pair-header"><span class="'+giver+'-color">'+PLAYER_NAMES[giver]+'</span><span>&#8594;</span><span class="'+receiver+'-color">'+PLAYER_NAMES[receiver]+'</span><span style="margin-left:auto;font-size:.8em;color:var(--text-dim)">'+gives.length+' to give</span></div>';
 if(gives.length===0){
@@ -593,7 +776,7 @@ anything=true;
 html+='<div class="trade-list">';
 (function(giver,receiver,gives){
 gives.forEach(function(s){
-html+='<div class="trade-item" style="border-left-color:'+cssVar(giver)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[giver]+' &#8594; '+PLAYER_NAMES[receiver]+'</span><button class="mark-traded" onclick="logTrade(\''+s.id+'\',\''+receiver+'\')">Mark traded</button></div>';
+html+='<div class="trade-item" style="border-left-color:'+cssVar(giver)+'"><span class="trade-sprite-name">'+s.name+'</span><span class="trade-tag tag-has">'+PLAYER_NAMES[giver]+' &#8594; '+PLAYER_NAMES[receiver]+'</span>'+tradeBtn(s.id,receiver,giver)+'</div>';
 });
 })(giver,receiver,gives);
 html+='</div>';
@@ -624,14 +807,14 @@ SPRITES.forEach(function(s){PLAYERS.forEach(function(p){
 if(!state[s.id])state[s.id]={};
 if(typeof state[s.id][p]!=="boolean")state[s.id][p]=false;
 });});
-saveState();renderSprites();updateProgress();showToast("Imported!");
+saveState();renderGrid();updateProgress();showToast("Imported!");
 }catch(err){showToast("Invalid file.","error")}
 };
 reader.readAsText(file);event.target.value="";
 }
 
 function resetData(){
-if(confirm("Reset all progress for everyone?")){state={};initState();renderSprites();updateProgress();showToast("Reset!");}
+if(confirm("Reset all progress for everyone?")){state={};pending=[];savePending();initState();renderGrid();updateProgress();renderPending();showToast("Reset!");}
 }
 
 function showToast(msg,type){
@@ -645,7 +828,7 @@ if(e.key==="/"){e.preventDefault();document.getElementById("search").focus();}
 if(e.key==="Escape"){if(document.getElementById("tradeOverlay").classList.contains("show"))closeTradeCentral();}
 });
 
-initState();renderSprites();updateProgress();
+initState();loadPending();renderGrid();updateProgress();
 </script>
 </body>
 </html>

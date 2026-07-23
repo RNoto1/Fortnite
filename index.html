@@ -81,6 +81,7 @@ border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
 .sprite-card[data-category="gummy"]::before{background:linear-gradient(90deg,#ff006e,#06ffa5)}
 .sprite-card[data-category="galaxy"]::before{background:linear-gradient(90deg,#7b2cbf,#00f5ff)}
 .sprite-card[data-category="holofoil"]::before{background:linear-gradient(90deg,#ff006e,#9d4edd,#00f5ff)}
+.sprite-card[data-category="cube"]::before{background:linear-gradient(90deg,#6c0baa,#3a0066,#6c0baa)}
 .sprite-name{font-size:1em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .sprite-type-badge{font-size:.65em;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase}
 .rarity-badge{font-size:.6em;padding:2px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
@@ -93,6 +94,7 @@ border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
 .badge-gummy{background:rgba(255,0,110,.2);color:var(--pink)}
 .badge-galaxy{background:rgba(0,245,255,.2);color:var(--blue)}
 .badge-holofoil{background:linear-gradient(90deg,rgba(255,0,110,.2),rgba(0,245,255,.2));color:#fff}
+.badge-cube{background:rgba(108,11,170,.25);color:#b347ff}
 .checkboxes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .cb-wrapper{display:flex;flex-direction:column;align-items:center;gap:4px}
 .cb-label{font-size:.72em;font-weight:600}
@@ -217,6 +219,7 @@ header h1{font-size:1.8em}
 <button class="filter-btn" data-filter="gummy" onclick="setCategoryFilter('gummy')">Gummy</button>
 <button class="filter-btn" data-filter="galaxy" onclick="setCategoryFilter('galaxy')">Galaxy</button>
 <button class="filter-btn" data-filter="holofoil" onclick="setCategoryFilter('holofoil')">Holofoil</button>
+<button class="filter-btn" data-filter="cube" onclick="setCategoryFilter('cube')">Cube</button>
 <button class="btn-action btn-trade" onclick="openTradeCentral()">Trade Central</button>
 <button class="btn-action btn-export" onclick="exportData()">Export</button>
 <button class="btn-action btn-import" onclick="document.getElementById('importFile').click()">Import</button>
@@ -225,23 +228,23 @@ header h1{font-size:1.8em}
 </div>
 <div class="progress-section">
 <div class="progress-card" data-player="rich" onclick="togglePlayerFilter('rich')">
-<h3 class="rich-color">Rich <span class="count" id="richCount">0 / 81</span></h3>
+<h3 class="rich-color">Rich <span class="count" id="richCount">0 / 101</span></h3>
 <div class="progress-bar"><div class="progress-fill rich-bg" id="richBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="liz" onclick="togglePlayerFilter('liz')">
-<h3 class="liz-color">Liz <span class="count" id="lizCount">0 / 81</span></h3>
+<h3 class="liz-color">Liz <span class="count" id="lizCount">0 / 101</span></h3>
 <div class="progress-bar"><div class="progress-fill liz-bg" id="lizBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="mike" onclick="togglePlayerFilter('mike')">
-<h3 class="mike-color">Mike <span class="count" id="mikeCount">0 / 81</span></h3>
+<h3 class="mike-color">Mike <span class="count" id="mikeCount">0 / 101</span></h3>
 <div class="progress-bar"><div class="progress-fill mike-bg" id="mikeBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" data-player="tyler" onclick="togglePlayerFilter('tyler')">
-<h3 class="tyler-color">Tyler <span class="count" id="tylerCount">0 / 81</span></h3>
+<h3 class="tyler-color">Tyler <span class="count" id="tylerCount">0 / 101</span></h3>
 <div class="progress-bar"><div class="progress-fill tyler-bg" id="tylerBar" style="width:0%"></div></div>
 </div>
 <div class="progress-card" id="teamCard" onclick="showTeamView()">
-<h3 class="team-color">Team <span class="count" id="teamCount">0 / 324</span></h3>
+<h3 class="team-color">Team <span class="count" id="teamCount">0 / 404</span></h3>
 <div class="progress-bar"><div class="progress-fill team-bg" id="teamBar" style="width:0%"></div></div>
 </div>
 </div>
@@ -308,6 +311,7 @@ const SPRITES=[
 {id:"earth",name:"Earth Sprite",category:"base",rarity:"rare"},
 {id:"fire",name:"Fire Sprite",category:"base",rarity:"rare"},
 {id:"fishy",name:"Fishy Sprite",category:"base",rarity:"rare"},
+{id:"air",name:"Air Sprite",category:"base",rarity:"rare"},
 {id:"duck",name:"Duck Sprite",category:"base",rarity:"epic"},
 {id:"ghost",name:"Ghost Sprite",category:"base",rarity:"epic"},
 {id:"demon",name:"Demon Sprite",category:"base",rarity:"epic"},
@@ -317,18 +321,18 @@ const SPRITES=[
 {id:"punk",name:"Punk Sprite",category:"base",rarity:"legendary"},
 {id:"dream",name:"Dream Sprite",category:"base",rarity:"legendary"},
 {id:"boss",name:"Boss Sprite",category:"base",rarity:"legendary"},
+{id:"seven",name:"Seven Sprite",category:"base",rarity:"legendary"},
 {id:"zeropoint",name:"Zero Point Sprite",category:"base",rarity:"mythic"},
 {id:"burntpeanut",name:"BurntPeanut Sprite",category:"base",rarity:"mythic"},
 {id:"grimreaper",name:"GrimReaper Sprite",category:"base",rarity:"mythic"},
 {id:"batman",name:"Batman Sprite",category:"base",rarity:"mythic"},
-{id:"air",name:"Air Sprite",category:"base",rarity:"epic"},
-{id:"seven",name:"Seven Sprite",category:"base",rarity:"epic"},
 {id:"vinijr",name:"Vini Jr. Sprite",category:"base",rarity:"mythic"},
 {id:"pollo",name:"Pollo Sprite",category:"base",rarity:"mythic"},
 {id:"gold_water",name:"Gold Water Sprite",category:"gold",rarity:"rare"},
 {id:"gold_earth",name:"Gold Earth Sprite",category:"gold",rarity:"rare"},
 {id:"gold_fire",name:"Gold Fire Sprite",category:"gold",rarity:"rare"},
 {id:"gold_fishy",name:"Gold Fishy Sprite",category:"gold",rarity:"rare"},
+{id:"gold_air",name:"Gold Air Sprite",category:"gold",rarity:"rare"},
 {id:"gold_duck",name:"Gold Duck Sprite",category:"gold",rarity:"epic"},
 {id:"gold_ghost",name:"Gold Ghost Sprite",category:"gold",rarity:"epic"},
 {id:"gold_demon",name:"Gold Demon Sprite",category:"gold",rarity:"epic"},
@@ -338,12 +342,15 @@ const SPRITES=[
 {id:"gold_punk",name:"Gold Punk Sprite",category:"gold",rarity:"legendary"},
 {id:"gold_dream",name:"Gold Dream Sprite",category:"gold",rarity:"legendary"},
 {id:"gold_boss",name:"Gold Boss Sprite",category:"gold",rarity:"legendary"},
+{id:"gold_seven",name:"Gold Seven Sprite",category:"gold",rarity:"legendary"},
 {id:"gold_zeropoint",name:"Gold Zero Point Sprite",category:"gold",rarity:"mythic"},
 {id:"gold_grimreaper",name:"Gold GrimReaper Sprite",category:"gold",rarity:"mythic"},
+{id:"gold_batman",name:"Gold Batman Sprite",category:"gold",rarity:"mythic"},
 {id:"gummy_water",name:"Gummy Water Sprite",category:"gummy",rarity:"rare"},
 {id:"gummy_earth",name:"Gummy Earth Sprite",category:"gummy",rarity:"rare"},
 {id:"gummy_fire",name:"Gummy Fire Sprite",category:"gummy",rarity:"rare"},
 {id:"gummy_fishy",name:"Gummy Fishy Sprite",category:"gummy",rarity:"rare"},
+{id:"gummy_air",name:"Gummy Air Sprite",category:"gummy",rarity:"rare"},
 {id:"gummy_duck",name:"Gummy Duck Sprite",category:"gummy",rarity:"epic"},
 {id:"gummy_ghost",name:"Gummy Ghost Sprite",category:"gummy",rarity:"epic"},
 {id:"gummy_demon",name:"Gummy Demon Sprite",category:"gummy",rarity:"epic"},
@@ -353,12 +360,15 @@ const SPRITES=[
 {id:"gummy_punk",name:"Gummy Punk Sprite",category:"gummy",rarity:"legendary"},
 {id:"gummy_dream",name:"Gummy Dream Sprite",category:"gummy",rarity:"legendary"},
 {id:"gummy_boss",name:"Gummy Boss Sprite",category:"gummy",rarity:"legendary"},
+{id:"gummy_seven",name:"Gummy Seven Sprite",category:"gummy",rarity:"legendary"},
 {id:"gummy_zeropoint",name:"Gummy Zero Point Sprite",category:"gummy",rarity:"mythic"},
 {id:"gummy_grimreaper",name:"Gummy GrimReaper Sprite",category:"gummy",rarity:"mythic"},
+{id:"gummy_batman",name:"Gummy Batman Sprite",category:"gummy",rarity:"mythic"},
 {id:"galaxy_water",name:"Galaxy Water Sprite",category:"galaxy",rarity:"rare"},
 {id:"galaxy_earth",name:"Galaxy Earth Sprite",category:"galaxy",rarity:"rare"},
 {id:"galaxy_fire",name:"Galaxy Fire Sprite",category:"galaxy",rarity:"rare"},
 {id:"galaxy_fishy",name:"Galaxy Fishy Sprite",category:"galaxy",rarity:"rare"},
+{id:"galaxy_air",name:"Galaxy Air Sprite",category:"galaxy",rarity:"rare"},
 {id:"galaxy_duck",name:"Galaxy Duck Sprite",category:"galaxy",rarity:"epic"},
 {id:"galaxy_ghost",name:"Galaxy Ghost Sprite",category:"galaxy",rarity:"epic"},
 {id:"galaxy_demon",name:"Galaxy Demon Sprite",category:"galaxy",rarity:"epic"},
@@ -368,12 +378,15 @@ const SPRITES=[
 {id:"galaxy_punk",name:"Galaxy Punk Sprite",category:"galaxy",rarity:"legendary"},
 {id:"galaxy_dream",name:"Galaxy Dream Sprite",category:"galaxy",rarity:"legendary"},
 {id:"galaxy_boss",name:"Galaxy Boss Sprite",category:"galaxy",rarity:"legendary"},
+{id:"galaxy_seven",name:"Galaxy Seven Sprite",category:"galaxy",rarity:"legendary"},
 {id:"galaxy_zeropoint",name:"Galaxy Zero Point Sprite",category:"galaxy",rarity:"mythic"},
 {id:"galaxy_grimreaper",name:"Galaxy GrimReaper Sprite",category:"galaxy",rarity:"mythic"},
+{id:"galaxy_batman",name:"Galaxy Batman Sprite",category:"galaxy",rarity:"mythic"},
 {id:"holo_water",name:"Holofoil Water Sprite",category:"holofoil",rarity:"rare"},
 {id:"holo_earth",name:"Holofoil Earth Sprite",category:"holofoil",rarity:"rare"},
 {id:"holo_fire",name:"Holofoil Fire Sprite",category:"holofoil",rarity:"rare"},
 {id:"holo_fishy",name:"Holofoil Fishy Sprite",category:"holofoil",rarity:"rare"},
+{id:"holo_air",name:"Holofoil Air Sprite",category:"holofoil",rarity:"rare"},
 {id:"holo_duck",name:"Holofoil Duck Sprite",category:"holofoil",rarity:"epic"},
 {id:"holo_ghost",name:"Holofoil Ghost Sprite",category:"holofoil",rarity:"epic"},
 {id:"holo_demon",name:"Holofoil Demon Sprite",category:"holofoil",rarity:"epic"},
@@ -383,15 +396,25 @@ const SPRITES=[
 {id:"holo_punk",name:"Holofoil Punk Sprite",category:"holofoil",rarity:"legendary"},
 {id:"holo_dream",name:"Holofoil Dream Sprite",category:"holofoil",rarity:"legendary"},
 {id:"holo_boss",name:"Holofoil Boss Sprite",category:"holofoil",rarity:"legendary"},
+{id:"holo_seven",name:"Holofoil Seven Sprite",category:"holofoil",rarity:"legendary"},
 {id:"holo_zeropoint",name:"Holofoil Zero Point Sprite",category:"holofoil",rarity:"mythic"},
-{id:"holo_grimreaper",name:"Holofoil GrimReaper Sprite",category:"holofoil",rarity:"mythic"}
+{id:"holo_grimreaper",name:"Holofoil GrimReaper Sprite",category:"holofoil",rarity:"mythic"},
+{id:"holo_batman",name:"Holofoil Batman Sprite",category:"holofoil",rarity:"mythic"},
+{id:"cube_fire",name:"Cube Fire Sprite",category:"cube",rarity:"rare"},
+{id:"cube_earth",name:"Cube Earth Sprite",category:"cube",rarity:"rare"},
+{id:"cube_fishy",name:"Cube Fishy Sprite",category:"cube",rarity:"rare"},
+{id:"cube_dream",name:"Cube Dream Sprite",category:"cube",rarity:"legendary"},
+{id:"cube_punk",name:"Cube Punk Sprite",category:"cube",rarity:"legendary"},
+{id:"cube_boss",name:"Cube Boss Sprite",category:"cube",rarity:"legendary"},
+{id:"cube_grimreaper",name:"Cube GrimReaper Sprite",category:"cube",rarity:"mythic"},
+{id:"cube_batman",name:"Cube Batman Sprite",category:"cube",rarity:"mythic"}
 ];
 const PLAYERS=["rich","liz","mike","tyler"];
 const LOOP_ORDER=["rich","mike","liz","tyler"];
 const PLAYER_NAMES={rich:"Rich",liz:"Liz",mike:"Mike",tyler:"Tyler"};
 const PLAYER_COLORS={rich:"purple",liz:"pink",mike:"blue",tyler:"orange"};
 const RARITY_RANK={rare:0,epic:1,legendary:2,mythic:3};
-const THEME_ORDER={base:0,gold:1,gummy:2,galaxy:3,holofoil:4};
+const THEME_ORDER={base:0,gold:1,gummy:2,galaxy:3,holofoil:4,cube:5};
 const STORAGE_KEY="fortnite_sprite_tracker_v3";
 const PENDING_KEY="fortnite_sprite_tracker_pending_v1";
 let currentCategoryFilter="all";
@@ -452,7 +475,8 @@ const categories=[
 {id:"gold",name:"Gold Variants"},
 {id:"gummy",name:"Gummy Variants"},
 {id:"galaxy",name:"Galaxy Variants"},
-{id:"holofoil",name:"Holofoil Variants"}
+{id:"holofoil",name:"Holofoil Variants"},
+{id:"cube",name:"Cube Variants"}
 ];
 let html="";
 categories.forEach(function(cat){
@@ -466,7 +490,7 @@ applyFilters();
 }
 
 /* Player layout: grouped by sprite family (all versions of one creature together),
-   families ordered low->high rarity, versions ordered base -> gold -> gummy -> galaxy -> holofoil. */
+   families ordered low->high rarity, versions ordered base -> gold -> gummy -> galaxy -> holofoil -> cube. */
 function renderFamilyLayout(){
 const container=document.getElementById("spriteContainer");
 const bases=SPRITES.filter(function(s){return s.category==="base";}).sort(function(a,b){return (RARITY_RANK[a.rarity]||0)-(RARITY_RANK[b.rarity]||0);});
